@@ -1,25 +1,22 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+{% block extra_css %}
 {% load static %}
-<html>
+<link rel="stylesheet" href="{% static 'home/styles.css' %}">
+{% endblock %}
+{% block content %}
 
-<head>
-	<meta charset="UTF-8">
-	<title>Mini Games</title>
-	<link rel="stylesheet" href="{% static 'home/styles.css' %}">
-</head>
+<h1>Mini Games</h1>
 
-<body>
-	<div id="title">
-		<h1>Mini Games</h1>
-	</div>
-	<div id="container">
-		{% for game in games %}
-		<div class="game">
-			<a href="{% url game|add:':main' %}">{{game}}</a>
-		</div>
-
+<div id="container">
+	{% for game in games %}
+	<div class="game">
+		{% url game|add:":main" as game_url %}
+		{% if game_url %}
+		<a href="{% url game|add:':main' %}">{{game}}</a>
+		{% else %}
+		<span>{{game}}</span>
+		{% endif %}
 		{% endfor %}
 	</div>
-</body>
-
-</html>
+</div>
+{% endblock %}
