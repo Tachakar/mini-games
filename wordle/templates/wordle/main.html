@@ -1,4 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'wordle/styles.css' %}">
-<div class="name">Wordle</div>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'wordle/wordle_styles.css' %}">
+{% endblock %}
+{% block content %}
+<div id="title">Wordle</div>
+<div id="grid"></div>
+{% endblock %}

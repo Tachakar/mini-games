@@ -9,8 +9,6 @@ def homepage(req):
         if curr_game != "home" and curr_game.startswith("django.") == False:
             games.append(curr_game)
 
-    for _ in range(5):
-        games.append("game")
     ctx = {"games":games}
 
     return render(req, "home/home_page.html", ctx)

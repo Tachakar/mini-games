@@ -4,13 +4,20 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Mini Games</title>
-	<link rel="stylesheet" href="{% static 'styles.css' %}">
+	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 	{% block extra_css %}{% endblock %}
 
 </head>
 
 <body>
-	<h2>navbar</h2>
+	<div id="navbar">
+		<a href="https://github.com/Tachakar/MiniGames" target="_blank">
+			<img src="{% static 'assets/github-mark-white.png' %}" class="navbar-socials" alt="GitHub Logo">
+		</a>
+		<a href="https://www.linkedin.com/in/mateusz-toczyski-629aa4242/" target="_blank">
+			<img src="{% static 'assets/InBug-White.png' %}" alt="LinikedIn Logo" class="navbar-socials">
+		</a>
+	</div>
 	{% block content %}
 	{% endblock %}
 
