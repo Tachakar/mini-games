@@ -6,5 +6,9 @@
 {% endblock %}
 {% block content %}
 <div id="title">Wordle</div>
-<div id="grid"></div>
+<div id="grid">
+	{% for guess in guesses %}
+	<div class="guess">{{guess}}</div>
+	{% endfor %}
+</div>
 {% endblock %}
