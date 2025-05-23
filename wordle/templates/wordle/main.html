@@ -8,7 +8,11 @@
 <div id="title">Wordle</div>
 <div id="grid">
 	{% for guess in guesses %}
-	<div class="guess">{{guess}}</div>
+	<div class="row">
+		{% for letter in guess %}
+		<div class="letter">{{letter}}</div>
+		{%endfor%}
+	</div>
 	{% endfor %}
 </div>
 {% endblock %}
