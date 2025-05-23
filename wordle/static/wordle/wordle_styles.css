@@ -1,0 +1,16 @@
+#title {
+	text-align: center;
+	font-size: 69px;
+	padding-top: 10px;
+	letter-spacing: 4px;
+}
+
+#grid {
+	display: flex;
+	border: solid black 4px;
+	height: 600px;
+	width: 700px;
+	align-items: center;
+	margin: 0 auto;
+	margin-top: 40px;
+}
