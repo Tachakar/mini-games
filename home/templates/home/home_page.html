@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Mini Games</title>
+	<link rel="stylesheet" href="{% static 'home/styles.css' %}">
+</head>
+
+<body>
+	<div id="title">
+		<h1>Mini Games</h1>
+	</div>
+	<div id="container">
+		{% for game in games %}
+		<div class="game">
+			<a href="{% url game|add:':main' %}">{{game}}</a>
+		</div>
+
+		{% endfor %}
+	</div>
+</body>
+
+</html>
