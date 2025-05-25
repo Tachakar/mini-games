@@ -3,7 +3,7 @@ from .models import Word
 def main(req):
     guesses = []
     for _ in range(6):
-        guesses.append("abcde")
+        guesses.append("     ")
 
     ctx = {"guesses" : guesses}
     return render(req, "wordle/main.html", ctx)

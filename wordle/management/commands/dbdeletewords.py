@@ -7,7 +7,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM sqlite_sequence WHERE name='wordle_word';")
+                cursor.execute("ALTER SEQUENCE wordle_word_id_seq RESTART WITH 1;")
             Word.objects.all().delete()
         except:
             raise CommandError("Something went wrong.")
