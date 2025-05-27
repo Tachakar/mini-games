@@ -1,7 +1,8 @@
 from django.urls import path
-from . import views
+from django.views.generic import TemplateView
+from .views import Main
 app_name = "wordle"
 
 urlpatterns = [
-    path("", views.main, name='main'),
+    path("", Main.as_view(), name='main'),
 ]

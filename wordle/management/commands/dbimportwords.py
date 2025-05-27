@@ -7,6 +7,8 @@ class Command(BaseCommand):
             with open("words.txt") as file:
                 words = []
                 for line in file:
+                    if line.split()[0].isdigit():
+                        continue
                     current_line = str(line.split()[0])
                     new_word = Word(text = current_line)
                     words.append(new_word)
