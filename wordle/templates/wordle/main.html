@@ -14,6 +14,12 @@
 		{%endfor%}
 	</div>
 	{% endfor %}
-	<h style="text-align: center;">{{random_word}}</h1>
+	<h style="text-align: center;">{{winning_word}}</h1>
+		<form method="post">
+			{% csrf_token %}
+			<input type="text" maxlength="5" minlength="5" name="guess" required>
+
+		</form>
+
 </div>
 {% endblock %}

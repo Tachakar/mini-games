@@ -1,28 +1,52 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.views.generic import TemplateView
 from .models import Word
-from random import randint
+from random import choice
 
 
 NUMBER_OF_WORDS = 2315
 
-class Main(TemplateView):
+class WordleView(TemplateView):
+
+    model = Word
+    template_name = 'wordle/main.html'
+
+    def get_random_word(self):
+        words = self.model.objects.values_list('text', flat=True)
+        return choice(words)
+
+
+    def get(self, request, *args, **kwargs):
+
+        if 'winning_word' not in request.session:
+            request.session['winning_word'] = self.get_random_word()
+        if 'guesses' not in request.session:
+            request.session['guesses'] = ['     ' for _ in range(6)]
+        print(request.session['winning_word'])
+        print(request.session['guesses'])
+
+        ctx = self.get_context_data()
+        return self.render_to_response(ctx)
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-
-        rand_id = randint(1,NUMBER_OF_WORDS)
-        rand_word = get_object_or_404(Word, pk=rand_id)
-        data["random_word"] = rand_word
-
-        guesses = []
-        for _ in range(6):
-            guesses.append("     ")
-        data["guesses"] = guesses
-
+        data['winning_word'] = self.request.session['winning_word']
+        data['guesses'] = self.request.session['guesses']
         return data
 
-    def get(self, req):
-        ctx = self.get_context_data()
-        return render(req,"wordle/main.html", ctx)
-
+    def post(self, request, *args, **kwargs):
+        guess = request.POST.get('guess')
+        guesses = request.session['guesses']
+        current_index = None
+        for index, text in enumerate(request.session['guesses']):
+            if text == "     ":
+                current_index = index
+                break
+        if current_index is not None:
+            if len(guess) == 5:
+                guesses[current_index] = guess
+            request.session['guesses'] = guesses
+        else:
+            del request.session['guesses']
+        return redirect(reverse('wordle:main'))
