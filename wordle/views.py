@@ -1,9 +1,8 @@
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 from .models import Word
 from random import choice
-
 
 NUMBER_OF_WORDS = 2315
 
@@ -13,7 +12,7 @@ class WordleView(TemplateView):
     template_name = 'wordle/main.html'
 
     def get_random_word(self):
-        words = self.model.objects.values_list('text', flat=True)
+        words = self.model.objects.values_list("text", flat = True)
         return choice(words)
 
 
@@ -23,9 +22,6 @@ class WordleView(TemplateView):
             request.session['winning_word'] = self.get_random_word()
         if 'guesses' not in request.session:
             request.session['guesses'] = ['     ' for _ in range(6)]
-        print(request.session['winning_word'])
-        print(request.session['guesses'])
-
         ctx = self.get_context_data()
         return self.render_to_response(ctx)
 
@@ -38,15 +34,16 @@ class WordleView(TemplateView):
     def post(self, request, *args, **kwargs):
         guess = request.POST.get('guess')
         guesses = request.session['guesses']
-        current_index = None
+        row_index = None
         for index, text in enumerate(request.session['guesses']):
             if text == "     ":
-                current_index = index
+                row_index = index
                 break
-        if current_index is not None:
+        if row_index is not None:
             if len(guess) == 5:
-                guesses[current_index] = guess
+                guesses[row_index] = guess
             request.session['guesses'] = guesses
         else:
             del request.session['guesses']
+            del request.session['winning_word']
         return redirect(reverse('wordle:main'))

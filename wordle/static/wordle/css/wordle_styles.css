@@ -22,7 +22,7 @@
 	margin: 0;
 }
 
-.letter {
+.letter-container {
 	background-color: white;
 	display: inline-block;
 	align-content: center;

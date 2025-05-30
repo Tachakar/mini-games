@@ -2,24 +2,27 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'wordle/wordle_styles.css' %}">
+<link rel="stylesheet" href="{% static 'wordle/css/wordle_styles.css' %}">
 {% endblock %}
 {% block content %}
 <div id="title">Wordle</div>
 <div id="grid">
 	{% for guess in guesses %}
-	<div class="row">
+	<div class="row" id="current-row">
 		{% for letter in guess %}
-		<div class="letter">{{letter}}</div>
+		<div class="letter-container">{{letter}}</div>
 		{%endfor%}
 	</div>
 	{% endfor %}
 	<h style="text-align: center;">{{winning_word}}</h1>
 		<form method="post">
 			{% csrf_token %}
-			<input type="text" maxlength="5" minlength="5" name="guess" required>
+			<input id="guess-input" type="text" maxlength="5" minlength="5" name="guess" required
+				autocomplete="off">
 
 		</form>
+		<script src="{% static 'wordle/js/main.js' %}"></script>
+
 
 </div>
 {% endblock %}
