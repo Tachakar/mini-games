@@ -8,20 +8,19 @@
 <div id="title">Wordle</div>
 <div id="grid">
 	{% for guess in guesses %}
-	<div class="row" id="current-row">
+	<div class="row" id="row{{forloop.counter}}">
 		{% for letter in guess %}
 		<div class="letter-container">{{letter}}</div>
 		{%endfor%}
 	</div>
 	{% endfor %}
-	<h style="text-align: center;">{{winning_word}}</h1>
-		<form method="post">
-			{% csrf_token %}
-			<input id="guess-input" type="text" maxlength="5" minlength="5" name="guess" required
-				autocomplete="off">
+	<form method="post">
+		{% csrf_token %}
+		<input id="guess-input" type="text" maxlength="5" minlength="5" name="guess" required
+			autocomplete="off">
 
-		</form>
-		<script src="{% static 'wordle/js/main.js' %}"></script>
+	</form>
+	<script src="{% static 'wordle/js/main.js' %}"></script>
 
 
 </div>

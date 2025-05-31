@@ -15,9 +15,7 @@ class WordleView(TemplateView):
         words = self.model.objects.values_list("text", flat = True)
         return choice(words)
 
-
     def get(self, request, *args, **kwargs):
-
         if 'winning_word' not in request.session:
             request.session['winning_word'] = self.get_random_word()
         if 'guesses' not in request.session:

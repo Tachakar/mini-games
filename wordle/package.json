@@ -1,0 +1,3 @@
+"scripts": {
+	"run": "ts-node ./static/wordle/ts/main.ts",
+}
