@@ -1,4 +1,3 @@
-import json
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -32,18 +31,17 @@ class WordleView(TemplateView):
         return data
 
     def post(self, request, *args, **kwargs):
-        guess = json.loads(request.body).get('guess')
+        guess = request.POST.get('guess')
         guesses = request.session['guesses']
         row_index = None
-        for index, text in enumerate(request.session['guesses']):
+        for index, text in enumerate(guesses):
             if text == "     ":
                 row_index = index
                 break
-        if row_index is not None and guess is not None:
-            if len(guess) == 5:
-                guesses[row_index] = guess
+        if row_index is not None and guess is not None and len(guess) == 5:
+            guesses[row_index] = guess
             request.session['guesses'] = guesses
         else:
-            del request.session['guesses']
-            del request.session['winning_word']
-        return JsonResponse({'status': 'ok' })
+            request.session['guesses'] = ["     " for _ in range(6)]
+            request.session['winning_word'] = self.get_random_word()
+        return redirect(reverse('wordle:main'))

@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, void 0, function* () {
-    const URL = 'http://127.0.0.1:8000/wordle/';
+    const myURL = 'http://127.0.0.1:8000/wordle/';
+    let guesses = JSON.parse(document.getElementById('guesses-data').textContent);
     function getCookieValue(name) {
         let cookieVal = null;
         if (document.cookie && document.cookie !== '') {
@@ -38,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
                 return i + 1;
         }
         ;
-        return;
+        return 1;
     }
     ;
     function getCurrentRow() {
@@ -51,30 +52,33 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
     let currentRow = getCurrentRow();
     document.addEventListener("keydown", (event) => __awaiter(void 0, void 0, void 0, function* () {
         const key = event.key;
-        console.log(currentRow);
         if (!currentRow)
             return;
         if (currrentContainer < 0)
             currrentContainer = 0;
         if (currrentContainer > 5)
             currrentContainer = 4;
-        if (/^[a-zA-Z]$/.test(key) && currrentContainer >= 0) {
+        if (/^[a-zA-Z]$/.test(key) && currrentContainer >= 0 && currrentContainer <= 4) {
             currentRow.children[currrentContainer].textContent = key.toUpperCase();
             guess = guess + key.toUpperCase();
             currrentContainer++;
         }
         ;
-        if (key === 'Backspace' && currrentContainer <= 5) {
+        if (key === 'Backspace' && currrentContainer <= 5 && currrentContainer >= 1) {
             --currrentContainer;
             currentRow.children[currrentContainer].textContent = '';
             guess = guess.slice(0, currrentContainer);
         }
         ;
         if (key === 'Enter' && currrentContainer == 5) {
-            fetch(URL, {
+            guesses[getEmptyRowIndex() - 1] = guess;
+            yield fetch(myURL, {
                 method: 'POST',
-                headers: csrftoken ? { "X-CSRFToken": csrftoken } : {},
-                body: JSON.stringify({ "guess": guess }),
+                headers: csrftoken ? {
+                    "X-CSRFToken": csrftoken,
+                    "Content-Type": "application/x-www-form-urlencoded"
+                } : {},
+                body: `guess=${encodeURIComponent(guess)}`
             });
             guess = "";
             currrentContainer = 0;

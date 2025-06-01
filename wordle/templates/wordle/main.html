@@ -18,7 +18,9 @@
 	<form method="post" id="user-post">
 		{% csrf_token %}
 	</form>
+	{{ guesses|json_script:"guesses-data" }}
 	<script src="{% static 'wordle/js/main.js' %}"></script>
+
 
 
 </div>
