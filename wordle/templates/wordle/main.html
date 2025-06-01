@@ -3,6 +3,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'wordle/css/wordle_styles.css' %}">
+<link rel="icon" href="{% static 'wordle/assets/favicon.ico'%}">
 {% endblock %}
 {% block content %}
 <div id="title">Wordle</div>
@@ -14,7 +15,7 @@
 		{%endfor%}
 	</div>
 	{% endfor %}
-	<form method="post">
+	<form method="post" id="user-post">
 		{% csrf_token %}
 	</form>
 	<script src="{% static 'wordle/js/main.js' %}"></script>

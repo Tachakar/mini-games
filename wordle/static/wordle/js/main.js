@@ -1,11 +1,35 @@
 "use strict";
-document.addEventListener("DOMContentLoaded", function () {
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, void 0, function* () {
     const URL = 'http://127.0.0.1:8000/wordle/';
-    function getCsrfVal() {
-        return;
+    function getCookieValue(name) {
+        let cookieVal = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                    cookieVal = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+                ;
+            }
+            ;
+        }
+        ;
+        return cookieVal;
     }
     ;
-    function getEmptyRow() {
+    const csrftoken = getCookieValue('csrftoken');
+    function getEmptyRowIndex() {
         var _a;
         let Rows = document.querySelectorAll('.row');
         let arrayRows = Array.from(Rows);
@@ -17,36 +41,45 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
     ;
-    const rowId = 'row' + getEmptyRow();
-    const currentRow = document.getElementById(rowId);
-    if (!currentRow)
-        return;
+    function getCurrentRow() {
+        const rowId = 'row' + getEmptyRowIndex();
+        return document.getElementById(rowId);
+    }
+    ;
     let currrentContainer = 0;
-    document.addEventListener("keydown", function (event) {
+    let guess = "";
+    let currentRow = getCurrentRow();
+    document.addEventListener("keydown", (event) => __awaiter(void 0, void 0, void 0, function* () {
         const key = event.key;
-        if (currrentContainer < 0) {
+        console.log(currentRow);
+        if (!currentRow)
+            return;
+        if (currrentContainer < 0)
             currrentContainer = 0;
-        }
-        ;
-        if (currrentContainer > 5) {
+        if (currrentContainer > 5)
             currrentContainer = 4;
-        }
-        ;
         if (/^[a-zA-Z]$/.test(key) && currrentContainer >= 0) {
             currentRow.children[currrentContainer].textContent = key.toUpperCase();
+            guess = guess + key.toUpperCase();
             currrentContainer++;
         }
         ;
-        if (key == 'Backspace' && currrentContainer <= 5) {
+        if (key === 'Backspace' && currrentContainer <= 5) {
             --currrentContainer;
             currentRow.children[currrentContainer].textContent = '';
+            guess = guess.slice(0, currrentContainer);
         }
         ;
-        if (key == 'Enter' && currrentContainer == 5) {
-            const response = fetch(URL, {
-                method: "POST",
+        if (key === 'Enter' && currrentContainer == 5) {
+            fetch(URL, {
+                method: 'POST',
+                headers: csrftoken ? { "X-CSRFToken": csrftoken } : {},
+                body: JSON.stringify({ "guess": guess }),
             });
+            guess = "";
+            currrentContainer = 0;
+            currentRow = getCurrentRow();
         }
         ;
-    });
-});
+    }));
+}));
