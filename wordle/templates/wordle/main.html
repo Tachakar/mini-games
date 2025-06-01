@@ -16,9 +16,6 @@
 	{% endfor %}
 	<form method="post">
 		{% csrf_token %}
-		<input id="guess-input" type="text" maxlength="5" minlength="5" name="guess" required
-			autocomplete="off">
-
 	</form>
 	<script src="{% static 'wordle/js/main.js' %}"></script>
 
