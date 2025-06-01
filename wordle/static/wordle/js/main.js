@@ -1,5 +1,10 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", function () {
+    const URL = 'http://127.0.0.1:8000/wordle/';
+    function getCsrfVal() {
+        return;
+    }
+    ;
     function getEmptyRow() {
         var _a;
         let Rows = document.querySelectorAll('.row');
@@ -18,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     let currrentContainer = 0;
     document.addEventListener("keydown", function (event) {
-        console.log(currrentContainer);
         const key = event.key;
         if (currrentContainer < 0) {
             currrentContainer = 0;
@@ -36,6 +40,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (key == 'Backspace' && currrentContainer <= 5) {
             --currrentContainer;
             currentRow.children[currrentContainer].textContent = '';
+        }
+        ;
+        if (key == 'Enter' && currrentContainer == 5) {
+            const response = fetch(URL, {
+                method: "POST",
+            });
         }
         ;
     });
