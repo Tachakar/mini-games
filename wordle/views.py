@@ -22,7 +22,10 @@ class WordleView(TemplateView):
             request.session['winning_word'] = self.get_random_word()
         if 'guesses' not in request.session:
             request.session['guesses'] = ['     ' for _ in range(6)]
+        if request.session['guesses'][5] != "     ":
+            request.session['guesses'] = ['     ' for _ in range(6)]
         ctx = self.get_context_data()
+        print(request.session.items())
         return self.render_to_response(ctx)
 
     def get_context_data(self, **kwargs):
@@ -42,7 +45,7 @@ class WordleView(TemplateView):
         if row_index < 6 and len(guess) == 5:
             guesses[row_index] = guess
             request.session['guesses'] = guesses
-        if row_index >= 5:
+        if row_index >= 6:
             request.session['guesses'] = ['     ' for _ in range(6)]
             request.session['winning_word'] = self.get_random_word()
         return JsonResponse({"staus": "ok", "guesses": request.session['guesses']})
