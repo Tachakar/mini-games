@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
 	const myURL = 'http://127.0.0.1:8000/wordle/'
-	let guesses: string[] = JSON.parse(document.getElementById('guesses-data')!.textContent!);
 	function getCookieValue(name: string) {
 		let cookieVal = null;
 		if (document.cookie && document.cookie !== '') {
@@ -50,20 +49,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 			guess = guess.slice(0, currrentContainer);
 		};
 		if (key === 'Enter' && currrentContainer == 5) {
-			guesses[getEmptyRowIndex() - 1] = guess;
-			await fetch(
-				myURL, {
-				method: 'POST',
-				headers: csrftoken ? {
-					"X-CSRFToken": csrftoken,
-					"Content-Type": "application/x-www-form-urlencoded"
-				} : {},
-				body: `guess=${encodeURIComponent(guess)}`
-			}
-			);
-			guess = "";
-			currrentContainer = 0;
-			currentRow = getCurrentRow();
+			try {
+				const response = await fetch(
+					myURL, {
+					method: 'POST',
+					headers: csrftoken ? {
+						"Content-Type": "applications/json",
+						"X-CSRFToken": csrftoken,
+					} : {},
+					body: JSON.stringify({ guess }),
+					credentials: "same-origin",
+
+				}
+				);
+				if (response.ok) {
+					guess = "";
+					currrentContainer = 0;
+					currentRow = getCurrentRow();
+				};
+			} catch (err) {
+				alert(`Error ${err}`)
+			};
+			window.location.reload();
 		};
 	});
 
