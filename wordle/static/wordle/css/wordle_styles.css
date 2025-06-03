@@ -36,3 +36,15 @@
 	text-transform: uppercase;
 	text-shadow: 1px 1px 2px lightgrey;
 }
+
+#correct-letter {
+	background-color: lightgreen;
+}
+
+#wrong-letter {
+	background-color: darkgrey;
+}
+
+#inside-letter {
+	background-color: yellow;
+}
