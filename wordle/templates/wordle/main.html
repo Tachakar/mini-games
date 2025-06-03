@@ -10,15 +10,12 @@
 <h1 style="text-align: center;">{{winning_word}}</h1>
 <div id="grid">
 	{% for guess in guesses %}
-
-	{% if guess|lower == winning_word %}
-	{% endif %}
 	<div class="row" id="row{{forloop.counter}}">
 		{% for letter in guess %}
-		{% with idx=forloop.counter%}
-		{% if letter|lower == winning_word|slice:idx|last%}
+		{% with idx=forloop.counter %}
+		{% if letter|lower == winning_word|slice:idx|last %}
 		<div class="letter-container" id="correct-letter">{{letter}}</div>
-		{% elif letter|lower not in winning_word and letter|lower|slice:idx|last != ' '%}
+		{% elif letter|lower not in winning_word and letter|lower|slice:idx|last != ' ' %}
 		<div class="letter-container" id="wrong-letter">{{letter}}</div>
 		{% elif letter|lower in winning_word %}
 		<div class="letter-container" id="inside-letter">{{letter}}</div>
@@ -26,10 +23,14 @@
 		<div class="letter-container">{{letter}}</div>
 		{% endif %}
 		{% endwith %}
-		{%endfor%}
+		{% endfor %}
 	</div>
 	{% endfor %}
-
+	{% for guess in guesses %}
+	{% if guess|lower == winning_word %}
+	<script src="{% static 'wordle/js/pop_up.js' %}"></script>
+	{% endif %}
+	{% endfor %}
 	<form method="post" id="user-post">
 		{% csrf_token %}
 	</form>
