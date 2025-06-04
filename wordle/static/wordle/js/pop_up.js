@@ -2,15 +2,17 @@
 document.addEventListener("DOMContentLoaded", () => {
     function getLastWord() {
         const guesses = document.getElementsByClassName('row');
+        let allRows = Array();
         for (let i = 0; i < guesses.length; i++) {
             const row = guesses[i];
-            let rows = Array();
+            let x = String();
             for (let j = 0; j < 5; j++) {
-                rows.push(row.children[j].textContent);
+                x += (row.children[j].textContent);
             }
             ;
-            if (rows[i] == "     ") {
-                return (rows[i - 1]);
+            allRows.push(x);
+            if (x == "     ") {
+                return (allRows[i - 1]);
             }
             ;
         }
@@ -20,7 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ;
     const word = getLastWord();
     if (word !== null) {
-        // IN PROGRESS 
+        const n = document.getElementsByTagName('body')[0];
+        if (n !== null) {
+            // to do
+        }
+        ;
     }
     else {
         return;

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 {% load static %}
 <html lang="en">
 
@@ -6,8 +7,7 @@
 	<title>Mini Games</title>
 	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
 	<link rel="icon" href="{% static 'assets/favicon.ico'%}">
-	{% block extra_css %}{% endblock %}
-
+	{% block extra_statics %}{% endblock %}
 </head>
 
 <body>
@@ -21,7 +21,6 @@
 	</div>
 	{% block content %}
 	{% endblock %}
-
 </body>
 
 </html>
