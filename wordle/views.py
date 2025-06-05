@@ -21,7 +21,6 @@ class WordleView(TemplateView):
         if 'guesses' not in request.session or request.session['guesses'][5] != "     ":
             request.session['guesses'] = ['     ' for _ in range(6)]
         ctx = self.get_context_data()
-        print(request.session.get('winning_word'))
         return self.render_to_response(ctx)
 
     def get_context_data(self, **kwargs):

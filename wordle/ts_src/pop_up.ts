@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+
 	function getLastWord() {
 		const guesses = document.getElementsByClassName('row');
 		let allRows = Array();
@@ -15,15 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		};
 		return null;
 	};
-	const word = getLastWord();
-	if (word !== null) {
-		const n = document.getElementsByTagName('body')[0];
-		if (n !== null) {
-			// to do
-		};
 
-	} else {
-		return
+	const word = getLastWord();
+	const gameResult = document.getElementById('game-result');
+	const popupOverlay = document.getElementById('popup-overlay');
+	if (word == null || !gameResult || !popupOverlay) return;
+	if (gameResult.dataset.won == 'true') {
+		popupOverlay.classList.remove('hidden');
 	};
 
 });

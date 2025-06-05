@@ -21,15 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     ;
     const word = getLastWord();
-    if (word !== null) {
-        const n = document.getElementsByTagName('body')[0];
-        if (n !== null) {
-            // to do
-        }
-        ;
-    }
-    else {
+    const gameResult = document.getElementById('game-result');
+    const pageContent = document.getElementById("page-content");
+    if (word === null || !gameResult || !pageContent)
         return;
-    }
-    ;
+    // pageContent.style.filter = "blur(3px)";
+    const popupOverlay = document.createElement('div');
+    popupOverlay.id = "popup-overlay";
+    document.body.appendChild(popupOverlay);
 });

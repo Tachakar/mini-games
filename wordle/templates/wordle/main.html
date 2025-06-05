@@ -4,9 +4,10 @@
 {% block extra_statics %}
 <link rel="stylesheet" href="{% static 'wordle/css/wordle_styles.css' %}">
 <link rel="icon" href="{% static 'wordle/assets/favicon.ico'%}">
-<script src="{% static 'wordle/js/main.js' %}"></script>
 {% endblock %}
 {% block content %}
+<script src="{% static 'wordle/js/main.js' %}"></script>
+<script src="{% static 'wordle/js/pop_up.js' %}"></script>
 <div id="page-content">
 	<div id="title">Wordle</div>
 	<h1 style="text-align: center;">{{winning_word}}</h1>
@@ -28,10 +29,14 @@
 			{% endfor %}
 		</div>
 		{% if guess|lower == winning_word %}
-		<script src="{% static 'wordle/js/pop_up.js' %}"></script>
-		<div id="popup-overlay"></div>
+		<div id='game-result' data-won='true'></div>
 		{% endif %}
 		{% endfor %}
+	</div>
+	<div id="popup-overlay" class="hidden">
+		<div id="popup-content">
+			<p>YOU WON!!!!</p>
+		</div>
 	</div>
 	<form method="post" id="user-post">
 		{% csrf_token %}
