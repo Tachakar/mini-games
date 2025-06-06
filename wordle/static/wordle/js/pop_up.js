@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ;
     const word = getLastWord();
     const gameResult = document.getElementById('game-result');
-    const pageContent = document.getElementById("page-content");
-    if (word === null || !gameResult || !pageContent)
+    const popupOverlay = document.getElementById('popup-overlay');
+    if (word == null || !gameResult || !popupOverlay)
         return;
-    // pageContent.style.filter = "blur(3px)";
-    const popupOverlay = document.createElement('div');
-    popupOverlay.id = "popup-overlay";
-    document.body.appendChild(popupOverlay);
+    if (gameResult.dataset.won == 'true') {
+        popupOverlay.classList.remove('hidden');
+    }
+    ;
 });

@@ -50,27 +50,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 		};
 		if (key === 'Enter' && currrentContainer == 5) {
 			try {
-				const response = await fetch(
-					myURL, {
-					method: 'POST',
-					headers: csrftoken ? {
-						"Content-Type": "applications/json",
-						"X-CSRFToken": csrftoken,
-					} : {},
-					body: JSON.stringify({ guess }),
-					credentials: "same-origin",
-
-				}
+				const x = await fetch(myURL,
+					{
+						method: "POST",
+						headers: csrftoken ? { "X-CSRFToken": csrftoken } : {},
+						body: JSON.stringify({ guess }),
+					},
 				);
-				if (response.ok) {
-					guess = "";
-					currrentContainer = 0;
-					currentRow = getCurrentRow();
-				};
+				if (!x.ok) {
+					return
+				}
+
 			} catch (err) {
 				alert(`Error ${err}`)
 			};
-			window.location.reload();
 		};
 	});
 

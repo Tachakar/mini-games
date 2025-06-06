@@ -71,27 +71,16 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
         ;
         if (key === 'Enter' && currrentContainer == 5) {
             try {
-                const response = yield fetch(myURL, {
-                    method: 'POST',
-                    headers: csrftoken ? {
-                        "Content-Type": "applications/json",
-                        "X-CSRFToken": csrftoken,
-                    } : {},
+                fetch(myURL, {
+                    method: "POST",
+                    headers: csrftoken ? { "X-CSRFToken": csrftoken } : {},
                     body: JSON.stringify({ guess }),
-                    credentials: "same-origin",
                 });
-                if (response.ok) {
-                    guess = "";
-                    currrentContainer = 0;
-                    currentRow = getCurrentRow();
-                }
-                ;
             }
             catch (err) {
                 alert(`Error ${err}`);
             }
             ;
-            window.location.reload();
         }
         ;
     }));
