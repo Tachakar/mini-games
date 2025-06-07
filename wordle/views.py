@@ -13,7 +13,7 @@ class WordleView(TemplateView):
     model = Word
     template_name = 'wordle/main.html'
     MAX_GUESSES = 6
-    MAX_WORD_LENGHT = 5
+    MAX_WORD_LENGTH = 5
 
 
     def initialize_session(self, request):
@@ -29,6 +29,9 @@ class WordleView(TemplateView):
         return str(choice(words))
 
     def get(self, request, *args, **kwargs):
+        #del request.session['guesses']
+        #del request.session['winning_word']
+        #del request.session['game_over']
         self.initialize_session(request)
         ctx = self.get_context_data()
         return self.render_to_response(ctx)
@@ -41,32 +44,30 @@ class WordleView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         try:
+            data = json.loads(request.body)
+            guess = data.get('guess').lower().strip()
+            winning_word = request.session.get('winning_word', '')
+            guesses = request.session.get('guesses', ['     ' for _ in range(self.MAX_GUESSES)])
             try:
-                data = json.loads(request.body)
-                guess = data.get('guess', '').lower()
+                row_index = guesses.index('     ')
             except:
-                return JsonResponse({'status':'error', 'message': str(Exception)},status=400)
-
-            if len(guess) != self.MAX_WORD_LENGHT:
-                return JsonResponse({'status':'error', 'message': f'Word must be {self.MAX_WORD_LENGHT} letters long'},status =400)
-
-            guesses = request.session.get("guesses",["     " for _ in range(self.MAX_GUESSES)])
-            print(guesses)
-            winning_word = request.session.get("winning_word", "")
-
-            try:
-                row_index = guesses.index("     ")
-            except:
-                return 
+                return JsonResponse({'status':'error', 'message': "Couldn't get row index"},status=400)
 
             guesses[row_index] = guess
-            request.session["guesses"] = guesses
-
+            request.session['guesses'] = guesses
             won = guess == winning_word
-            game_over = won or (row_index == self.MAX_GUESSES-1)
-            request.sesssion['game_over'] = game_over
+            game_over = won or (row_index == self.MAX_WORD_LENGTH-1)
+            request.session['game_over'] = game_over
+            if game_over:
+                return JsonResponse({'status':'over','message':'Game is finished'},status=200)
 
-            print(row_index)
-            return JsonResponse({"staus": "ok", "guesses": request.session['guesses'], 'game_over': game_over, 'won': won, 'winning_word': winning_word if game_over else None, 'row_index':row_index}, status=200)
+            return JsonResponse({
+                'status':'ok',
+                'game_over': game_over,
+                'guesses':guesses,
+                'won':won
+            },status=200)
+
         except:
-            return JsonResponse({'status':'error', 'message':str(Exception)}, status=400)
+            return JsonResponse({'status': 'error', 'message': 'Something went wrong'},status=400)
+

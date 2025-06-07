@@ -71,11 +71,14 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
         ;
         if (key === 'Enter' && currrentContainer == 5) {
             try {
-                fetch(myURL, {
+                yield fetch(myURL, {
                     method: "POST",
-                    headers: csrftoken ? { "X-CSRFToken": csrftoken } : {},
-                    body: JSON.stringify({ guess }),
+                    headers: csrftoken ? { 'X-CSRFToken': csrftoken } : {},
+                    body: JSON.stringify({ guess })
                 });
+                currrentContainer = 0;
+                guess = '';
+                currentRow = getCurrentRow();
             }
             catch (err) {
                 alert(`Error ${err}`);
