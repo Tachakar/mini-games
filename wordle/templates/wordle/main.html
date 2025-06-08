@@ -6,26 +6,14 @@
 <link rel="icon" href="{% static 'wordle/assets/favicon.ico'%}">
 {% endblock %}
 {% block content %}
-<script src="{% static 'wordle/js/main.js' %}"></script>
-<script src="{% static 'wordle/js/pop_up.js' %}"></script>
 <div id="page-content">
 	<div id="title">Wordle</div>
 	<h1 style="text-align: center;">{{winning_word}}</h1>
 	<div id="grid">
 		{% for guess in guesses %}
-		<div class="row" id="row{{forloop.counter}}">
+		<div class="row" id="row{{forloop.counter0}}">
 			{% for letter in guess %}
-			{% with idx=forloop.counter %}
-			{% if letter|lower == winning_word|slice:idx|last %}
-			<div class="letter-container" id="correct-letter">{{letter}}</div>
-			{% elif letter|lower not in winning_word and letter|lower|slice:idx|last != ' ' %}
-			<div class="letter-container" id="wrong-letter">{{letter}}</div>
-			{% elif letter|lower in winning_word %}
-			<div class="letter-container" id="inside-letter">{{letter}}</div>
-			{% else %}
-			<div class="letter-container" id="empty">{{letter}}</div>
-			{% endif %}
-			{% endwith %}
+			<div class="letter-container">{{letter}}</div>
 			{% endfor %}
 		</div>
 		{% if guess|lower == winning_word %}
@@ -41,5 +29,7 @@
 	<form method="post" id="user-post">
 		{% csrf_token %}
 	</form>
+	<script src="{% static 'wordle/js/main.js' %}"></script>
+	<script src="{% static 'wordle/js/pop_up.js' %}"></script>
 </div>
 {% endblock %}

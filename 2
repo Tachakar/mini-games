@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 	const myURL = 'http://127.0.0.1:8000/wordle/'
-
 	function getCookieValue(name: string) {
 		let cookieVal = null;
 		if (document.cookie && document.cookie !== '') {
@@ -20,14 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		let Rows = document.querySelectorAll('.row');
 		let arrayRows = Array.from(Rows);
 		for (let i = 0; i < arrayRows.length; i++) {
-			if (arrayRows[i].textContent?.trim() == "") return i;
+			if (arrayRows[i].textContent?.trim() == "") return i + 1;
 		};
-		return -1;
+		return 0;
 
 	};
 	function getCurrentRow() {
-		const n = getEmptyRowIndex();
-		const rowId = 'row' + n;
+		const rowId = 'row' + getEmptyRowIndex();
 		return document.getElementById(rowId);
 
 	};
@@ -52,29 +50,19 @@ document.addEventListener("DOMContentLoaded", () => {
 			guess = guess.slice(0, currentContainer);
 		};
 		if (key === 'Enter' && currentContainer == 5) {
-			if (getEmptyRowIndex() === -1) {
+			if (getEmptyRowIndex() === 0) {
 				window.location.reload()
 				return;
 			};
 			try {
+				let currentStatus;
 				const response = await fetch(myURL, {
 					method: "POST",
 					headers: csrftoken ? { 'X-CSRFToken': csrftoken } : {},
 					body: JSON.stringify({ guess })
 				})
 				const data = await response.json();
-				// UPDATE GRID CSS 
-				const rowData = data.guesses[rowIndex];
-				for (let i = 0; i < 5; i++) {
-					const letterStatus = rowData[i].status;
-					if (letterStatus === 'correct') {
-						currentRow?.children[i].classList.add('correct')
-					} else if (letterStatus === 'inside') {
-						currentRow?.children[i].classList.add('inside')
-					} else if (letterStatus === 'wrong') {
-						currentRow?.children[i].classList.add('wrong')
-					};
-				};
+				console.log(data.guesses[rowIndex - 1]);
 				currentContainer = 0;
 				guess = '';
 				currentRow = getCurrentRow();
