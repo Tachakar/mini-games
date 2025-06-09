@@ -64,9 +64,8 @@ class WordleView(TemplateView):
             guesses[row_index] = guessStatus
             request.session['guesses'] = guesses
             won = guess == winning_word
-            game_over = won or (row_index == self.MAX_WORD_LENGTH-1)
+            game_over = won or (row_index == self.MAX_WORD_LENGTH)
             request.session['game_over'] = game_over
-
             return JsonResponse({
                 'status':'ok',
                 'game_over': game_over,

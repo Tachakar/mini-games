@@ -72,11 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         ;
         if (key === 'Enter' && currentContainer == 5) {
-            if (getEmptyRowIndex() === -1) {
-                window.location.reload();
-                return;
-            }
-            ;
             try {
                 const response = yield fetch(myURL, {
                     method: "POST",
@@ -84,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     body: JSON.stringify({ guess })
                 });
                 const data = yield response.json();
-                // UPDATE GRID CSS 
+                // UPDATE GRID STYLE 
                 const rowData = data.guesses[rowIndex];
                 for (let i = 0; i < 5; i++) {
                     const letterStatus = rowData[i].status;
@@ -99,7 +94,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                     ;
                 }
-                ;
+                // CHECH IF GAME IS OVER
+                if (data.game_over) {
+                    const popUp = document.getElementById('popup-overlay');
+                    popUp === null || popUp === void 0 ? void 0 : popUp.classList.remove('hidden');
+                }
                 currentContainer = 0;
                 guess = '';
                 currentRow = getCurrentRow();
@@ -107,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             catch (err) {
                 alert(`Error ${err}`);
+                window.location.reload();
             }
             ;
         }

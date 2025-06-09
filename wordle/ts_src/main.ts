@@ -52,10 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			guess = guess.slice(0, currentContainer);
 		};
 		if (key === 'Enter' && currentContainer == 5) {
-			if (getEmptyRowIndex() === -1) {
-				window.location.reload()
-				return;
-			};
 			try {
 				const response = await fetch(myURL, {
 					method: "POST",
@@ -63,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					body: JSON.stringify({ guess })
 				})
 				const data = await response.json();
-				// UPDATE GRID CSS 
+				// UPDATE GRID STYLE 
 				const rowData = data.guesses[rowIndex];
 				for (let i = 0; i < 5; i++) {
 					const letterStatus = rowData[i].status;
@@ -74,13 +70,28 @@ document.addEventListener("DOMContentLoaded", () => {
 					} else if (letterStatus === 'wrong') {
 						currentRow?.children[i].classList.add('wrong')
 					};
-				};
+				}
+				// CHECH IF GAME IS OVER
+				if (data.game_over) {
+					const popupOverlay = document.getElementById('popup-overlay');
+					const popupContent = document.getElementById('popup-content');
+					if (!popupContent || !popupOverlay) return;
+					if (data.won) {
+						popupContent.textContent = "Good job, you've won!"
+					} else {
+
+						popupContent.textContent = "You've lost, please try again."
+					}
+					popupOverlay.classList.remove('hidden')
+					event.currentTarget?.removeEventListener("keydown")
+				}
 				currentContainer = 0;
 				guess = '';
 				currentRow = getCurrentRow();
 				rowIndex = getEmptyRowIndex();
 			} catch (err) {
 				alert(`Error ${err}`)
+				window.location.reload();
 			};
 		};
 	});
