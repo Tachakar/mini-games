@@ -62,14 +62,16 @@ document.addEventListener("DOMContentLoaded", () => {
 				// UPDATE GRID STYLE 
 				const rowData = data.guesses[rowIndex];
 				for (let i = 0; i < 5; i++) {
-					const letterStatus = rowData[i].status;
-					if (letterStatus === 'correct') {
-						currentRow?.children[i].classList.add('correct')
-					} else if (letterStatus === 'inside') {
-						currentRow?.children[i].classList.add('inside')
-					} else if (letterStatus === 'wrong') {
-						currentRow?.children[i].classList.add('wrong')
-					};
+					setTimeout(async () => {
+						const letterStatus = rowData[i].status;
+						if (letterStatus === 'correct') {
+							currentRow?.children[i].classList.add('correct', 'flip')
+						} else if (letterStatus === 'inside') {
+							currentRow?.children[i].classList.add('inside', 'flip')
+						} else if (letterStatus === 'wrong') {
+							currentRow?.children[i].classList.add('wrong', 'flip')
+						}
+					}, i * 400)
 				}
 				// CHECH IF GAME IS OVER
 				if (data.game_over) {
@@ -79,16 +81,18 @@ document.addEventListener("DOMContentLoaded", () => {
 					if (data.won) {
 						popupContent.textContent = "Good job, you've won!"
 					} else {
-
-						popupContent.textContent = "You've lost, try again."
+						let winningWord = data.winning_word
+						popupContent.textContent = `You've lost, try again. The word was: ${winningWord}`;
 					}
 					popupOverlay.classList.add('show');
 					return;
 				}
-				currentContainer = 0;
-				guess = '';
-				currentRow = getCurrentRow();
-				rowIndex = getEmptyRowIndex();
+				setTimeout(() => {
+					currentContainer = 0;
+					guess = '';
+					currentRow = getCurrentRow();
+					rowIndex = getEmptyRowIndex();
+				}, 2030);
 			} catch (err) {
 				alert(`Error ${err}`)
 				window.location.reload();

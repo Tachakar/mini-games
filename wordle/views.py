@@ -27,9 +27,12 @@ class WordleView(TemplateView):
         return str(choice(words))
 
     def get(self, request, *args, **kwargs):
-        del request.session['guesses']
-        del request.session['winning_word']
-        del request.session['game_over']
+        if 'guesses' in request.session:
+            del request.session['guesses']
+        if 'winning_word' in request.session:
+            del request.session['winning_word']
+        if 'game_over' in request.session:
+            del request.session['game_over']
         self.initialize_session(request)
         ctx = self.get_context_data()
         return self.render_to_response(ctx)
@@ -71,6 +74,7 @@ class WordleView(TemplateView):
                 'game_over': game_over,
                 'guesses':guesses,
                 'won':won,
+                'winning_word': winning_word if game_over else '',
             },status=200)
 
         except:

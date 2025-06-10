@@ -8,12 +8,13 @@
 {% block content %}
 <div id="page-content">
 	<div id="title">Wordle</div>
-	<h1 style="text-align: center;">{{winning_word}}</h1>
 	<div id="grid">
 		{% for guess in guesses %}
 		<div class="row" id="row{{forloop.counter0}}">
 			{% for letter in guess %}
-			<div class="letter-container">{{letter}}</div>
+			<div class="letter-container">
+				{{ letter }}
+			</div>
 			{% endfor %}
 		</div>
 		{% if guess|lower == winning_word %}
