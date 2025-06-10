@@ -21,12 +21,11 @@
 		{% endif %}
 		{% endfor %}
 	</div>
-	<div id="popup-overlay" class="hidden">
-		<div id="popup-content">
-			<form method="post">
-				<button type="button" onclick="window.location.reload()">Ok</button>
-			</form>
-		</div>
+	<div id="popup-overlay">
+		<div id="popup-content"></div>
+		<form method="post">
+			<button type="button" onclick="window.location.reload()">Restart</button>
+		</form>
 	</div>
 	<form method="post" id="user-post">
 		{% csrf_token %}

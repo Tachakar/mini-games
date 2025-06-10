@@ -80,10 +80,10 @@ document.addEventListener("DOMContentLoaded", () => {
 						popupContent.textContent = "Good job, you've won!"
 					} else {
 
-						popupContent.textContent = "You've lost, please try again."
+						popupContent.textContent = "You've lost, try again."
 					}
-					popupOverlay.classList.remove('hidden')
-					event.currentTarget?.removeEventListener("keydown")
+					popupOverlay.classList.add('show');
+					return;
 				}
 				currentContainer = 0;
 				guess = '';
