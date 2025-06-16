@@ -14,7 +14,9 @@
 		<div class="row" id="row{{forloop.counter0}}">
 			{% for letter in guess %}
 			<div class="letter-container">
-				{{ letter }}
+				<div class="letter">
+					{{ letter }}
+				</div>
 			</div>
 			{% endfor %}
 		</div>

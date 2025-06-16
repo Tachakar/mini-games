@@ -39,6 +39,12 @@ button:hover {
 	margin: 0;
 }
 
+.letter.after {
+	transform: rotateX(180deg);
+	transition: transform 0.4s ease;
+
+}
+
 .letter-container {
 	background-color: white;
 	border-radius: 2px;
@@ -53,11 +59,11 @@ button:hover {
 	box-shadow: 1px 1px 2px lightgrey;
 	text-transform: uppercase;
 	text-shadow: 1px 1px 2px lightgrey;
+	transition: transform 0.4s ease, background 0.4s;
 }
 
-.flip {
-	transform: rotateX(-180deg);
-	transition: transform 0.4s ease-in;
+.letter-container.flip {
+	transform: rotateX(180deg);
 }
 
 .correct {

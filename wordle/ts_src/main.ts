@@ -2,7 +2,6 @@ const myURL = 'http://127.0.0.1:8000/wordle/'
 const WORD_LENGTH = 5;
 const ANIMATION_DELAY_MS = 300;
 document.addEventListener("DOMContentLoaded", () => {
-
 	function getCookieValue(name: string) {
 		let cookieVal = null;
 		if (document.cookie && document.cookie !== '') {
@@ -17,14 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		};
 		return cookieVal;
 	};
-	const csrftoken = getCookieValue('csrftoken');
 	function getEmptyRowIndex() {
-		let Rows = document.querySelectorAll('.row');
-		let arrayRows = Array.from(Rows);
+		const Rows = document.querySelectorAll('.row');
+		const arrayRows = Array.from(Rows);
 		for (let i = 0; i < arrayRows.length; i++) {
 			if (arrayRows[i].textContent?.trim() == "") return i;
 		};
-		return -1;
+		return -1
 
 	};
 	function showPopup(winningWord: string, won: boolean, popupOverlay: HTMLElement, popupContent: HTMLElement) {
@@ -42,20 +40,23 @@ document.addEventListener("DOMContentLoaded", () => {
 		return document.getElementById(rowId);
 
 	};
-	function applyLetterStatus(letterContainer: Element, letterStatus: string) {
-		if (!letterContainer) return;
-		letterContainer.classList.add('flip');
-		if (letterStatus === 'correct') letterContainer.classList.add('correct');
-		else if (letterStatus === 'inside') letterContainer.classList.add('inside');
-		else if (letterStatus === 'wrong') letterContainer.classList.add('wrong');
+	function applyLetterStatus(letter: Element, letterData: { letter: string, status: string }) {
+		const letterStatus = letterData.status;
+		if (!letter) return;
+		letter.classList.add('flip');
+		letter.children[0].classList.add('after');
+		if (letterStatus === 'correct') letter.classList.add('correct');
+		else if (letterStatus === 'inside') letter.classList.add('inside');
+		else if (letterStatus === 'wrong') letter.classList.add('wrong');
 	}
-	async function processRowAnimations(guesses: { letter: string, status: string }[], row: HTMLElement) {
+	async function processRowAnimations(guessesData: { letter: string, status: string }[], row: HTMLElement) {
 		const promises: Promise<void>[] = [];
 		for (let i = 0; i < WORD_LENGTH; i++) {
+			const letter = row.children[i];
 			promises.push(
 				new Promise((resolve) => {
 					setTimeout(() => {
-						applyLetterStatus(row.children[i], guesses[i].status);
+						applyLetterStatus(letter, guessesData[i]);
 						resolve();
 					}, i * ANIMATION_DELAY_MS)
 				})
@@ -63,27 +64,31 @@ document.addEventListener("DOMContentLoaded", () => {
 		};
 		await Promise.all(promises)
 	};
-	let currentContainer = 0;
+	const csrftoken = getCookieValue('csrftoken');
+	let containerIndex = 0;
 	let guess = "";
-	let currentRow = getCurrentRow();
+	let row = getCurrentRow();
 	let rowIndex = getEmptyRowIndex();
+
 
 	document.addEventListener("keydown", async (event) => {
 		const key = event.key;
-		if (!currentRow) return;
-		if (currentContainer < 0) currentContainer = 0;
-		if (currentContainer > WORD_LENGTH) currentContainer = 4;
-		if (/^[a-zA-Z]$/.test(key) && currentContainer >= 0 && currentContainer <= 4) {
-			currentRow.children[currentContainer].textContent = key.toUpperCase();
+		if (!row) return;
+		if (containerIndex < 0) containerIndex = 0;
+		if (containerIndex > WORD_LENGTH) containerIndex = WORD_LENGTH;
+		if (/^[a-zA-Z]$/.test(key) && containerIndex >= 0 && containerIndex <= (WORD_LENGTH - 1)) {
+			const letterContainer = row.children[containerIndex].children[0];
+			letterContainer.textContent = key.toUpperCase();
 			guess = guess + key.toUpperCase();
-			currentContainer++;
+			containerIndex++;
 		};
-		if (key === 'Backspace' && currentContainer <= WORD_LENGTH && currentContainer >= 1) {
-			--currentContainer;
-			currentRow.children[currentContainer].textContent = '';
-			guess = guess.slice(0, currentContainer);
+		if (key === 'Backspace' && containerIndex <= WORD_LENGTH && containerIndex >= 1) {
+			containerIndex--;
+			const letterContainer = row.children[containerIndex].children[0];
+			letterContainer.textContent = " ";
+			guess = guess.slice(0, -1);
 		};
-		if (key === 'Enter' && currentContainer == WORD_LENGTH) {
+		if (key === 'Enter' && containerIndex == WORD_LENGTH) {
 			try {
 				const response = await fetch(myURL, {
 					method: "POST",
@@ -92,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				})
 				const data = await response.json();
 				const guesses = data.guesses[rowIndex];
-				await processRowAnimations(guesses, currentRow)
+				await processRowAnimations(guesses, row)
 
 				if (data.game_over) {
 					const popupOverlay = document.getElementById('popup-overlay');
@@ -101,9 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
 					showPopup(data.winning_word, data.won, popupOverlay, popupConent);
 					return;
 				}
-				currentContainer = 0;
+				containerIndex = 0;
 				guess = '';
-				currentRow = getCurrentRow();
+				row = getCurrentRow();
 				rowIndex = getEmptyRowIndex();
 			} catch (err) {
 				alert(`Error ${err}`)
