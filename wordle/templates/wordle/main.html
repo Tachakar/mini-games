@@ -34,7 +34,7 @@
 	<form method="post" id="user-post">
 		{% csrf_token %}
 	</form>
-	<script src="{% static 'wordle/js/main.js' %}"></script>
-	<script src="{% static 'wordle/js/pop_up.js' %}"></script>
+	<script type="module" src="{% static 'wordle/js/main.js' %}"></script>
+	<script type="module" src="{% static 'wordle/js/pop_up.js' %}"></script>
 </div>
 {% endblock %}
