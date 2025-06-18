@@ -1,3 +1,5 @@
 .venv/
 .env
-*.js
+*/static/*/js/*.js
+*/static/*/js/*.map
+!*/static/*/js/.gitkeep
