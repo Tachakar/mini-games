@@ -9,7 +9,6 @@
 <div id="page-content">
 	<div id="title">Wordle</div>
 	<div id="grid">
-		<h1 style="text-align: center;">{{winning_word}}</h1>
 		{% for guess in guesses %}
 		<div class="row" id="row{{forloop.counter0}}">
 			{% for letter in guess %}
