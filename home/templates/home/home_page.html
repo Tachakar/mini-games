@@ -1,22 +1,25 @@
+<!DOCTYPE html>
 {% extends "base.html" %}
 {% load static %}
 {% block extra_statics %}
-<link rel="stylesheet" href="{% static 'home/styles.css' %}">
+<link rel="stylesheet" href="{% static 'home/css/styles.css' %}">
 {% endblock %}
 {% block content %}
+<div id="page-content">
+	<h1 id="name">Mini Games</h1>
 
-<h1>Mini Games</h1>
-
-<div id="container">
-	{% for game in games %}
-	<div class="game">
-		{% url game|add:":main" as game_url %}
-		{% if game_url %}
-		<a href="{% url game|add:':main' %}">{{game}}</a>
-		{% else %}
-		<span>{{game}}</span>
-		{% endif %}
-		{% endfor %}
+	<div id="container">
+		{% for game in games %}
+		<div class="game">
+			{% url game|add:":index" as game_url %}
+			{% if game_url %}
+			<a href="{% url game|add:':index' %}">{{game}}</a>
+			{% else %}
+			<span>{{game}}</span>
+			{% endif %}
+			{% endfor %}
+		</div>
 	</div>
 </div>
+<script type="module" src="{% static 'home/js/index.js'%}"></script>
 {% endblock %}
