@@ -13,13 +13,23 @@ body {
 	margin: 0;
 	padding: 0;
 	display: flex;
-	justify-content: flex-end;
 	align-items: center;
 }
 
 .navbar-socials {
 	display: inline-flex;
-	margin: 0 6px;
+	margin-left: auto;
+	gap: 8px;
+	padding-right: 10px;
+}
+
+.icon {
 	width: 22px;
 	height: 22px;
+}
+
+.navbar-home {
+	margin: 0 6px;
+	width: 34px;
+	height: 34px;
 }
