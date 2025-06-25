@@ -1,6 +1,7 @@
-from django.http import HttpResponse
 from django.shortcuts import render
 from django.apps import apps
+from django.contrib.auth.models import User
+from django.views.generic import TemplateView
 
 def homepage(req):
     games = []
@@ -13,9 +14,21 @@ def homepage(req):
 
     return render(req, "home/home_page.html", ctx)
 
-def login(req):
-    return HttpResponse("Hello world")
+class SignUp(TemplateView):
+    template_name = 'home/sign_up.html'
+    def get(self, request):
+        ctx = {}
+        return self.render_to_response(ctx)
 
-def sign_up(req):
-    return HttpResponse("Hello world")
+    def post(self, request):
+        pass
+
+class Login(TemplateView):
+    template_name = 'home/login.html'
+    def get(self, request):
+        ctx = {}
+        return self.render_to_response(ctx)
+
+    def post(self, request):
+        pass
 
