@@ -1,20 +1,29 @@
 from django.http import JsonResponse
 import json
 from django.views.generic import TemplateView
-from .models import Word
+from .models import Word, Game
 from random import choice
 
 NUMBER_OF_WORDS = 2315
 
 class WordleView(TemplateView):
 
-    model = Word
     template_name = 'wordle/main.html'
     MAX_GUESSES = 6
     MAX_WORD_LENGTH = 5
 
+    def update_db(self, reqeust, guesses: list[str], game_over: bool, won: bool, winning_word: str):
+        game, created = Game.objects.get_or_create(
+            session_key = self.request.session.session_key, 
+            defaults={'session_key': self.request.session.session_key, 'winning_word': winning_word, 'guesses': guesses, 'game_over':game_over, 'won': won}
+        )
+        if not created:
+            game.guesses = guesses
+            game.won = won
+            game.game_over = game_over
+        game.save()
 
-    def initialize_session(self, request):
+    def init_session(self, request):
         if "winning_word" not in request.session:
             request.session["winning_word"] = self.get_random_word()
         if "guesses" not in request.session:
@@ -23,7 +32,7 @@ class WordleView(TemplateView):
             request.session["game_over"] = False
 
     def get_random_word(self):
-        words = self.model.objects.values_list("text", flat = True)
+        words = Word.objects.values_list("text", flat = True)
         return str(choice(words))
 
     def get(self, request, *args, **kwargs):
@@ -33,7 +42,7 @@ class WordleView(TemplateView):
             del request.session['winning_word']
         if 'game_over' in request.session:
             del request.session['game_over']
-        self.initialize_session(request)
+        self.init_session(request)
         ctx = self.get_context_data()
         return self.render_to_response(ctx)
 
@@ -62,13 +71,14 @@ class WordleView(TemplateView):
             try:
                 row_index = guesses.index('     ')
             except:
-                return JsonResponse({'status':'error', 'message': "Couldn't get row index"},status=400)
+                return JsonResponse({'status':'error', 'message': "Couldn't got row index"},status=400)
 
             guesses[row_index] = guessStatus
             request.session['guesses'] = guesses
             won = guess == winning_word
             game_over = won or (row_index == self.MAX_WORD_LENGTH)
             request.session['game_over'] = game_over
+            #self.update_db(request, guesses, game_over, won, winning_word)
             return JsonResponse({
                 'status':'ok',
                 'game_over': game_over,

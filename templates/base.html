@@ -12,15 +12,26 @@
 
 <body>
 	<div id="navbar">
-		<a href="https://github.com/Tachakar/MiniGames" target="_blank">
-			<img src="{% static 'assets/github-mark-white.png' %}" class="navbar-socials" alt="GitHub Logo">
+		<a href="{% url 'home:homepage'%}">
+			<img src="{% static 'assets/home.png'%}" alt="Home Page" class="navbar-home">
 		</a>
-		<a href="https://www.linkedin.com/in/mateusz-toczyski-629aa4242/" target="_blank">
-			<img src="{% static 'assets/InBug-White.png' %}" alt="LinikedIn Logo" class="navbar-socials">
-		</a>
+		<div id="account-management">
+			<a href="{% url 'home:sign_up' %}" id="sign-up">Sign up</a> | <a href="{% url 'home:login' %}"
+				id="login">Login</a>
+		</div>
+		<div class="navbar-socials">
+			<a href="https://github.com/Tachakar/MiniGames" target="_blank">
+				<img class="icon" src="{% static 'assets/github-mark-white.png' %}" alt="GitHub Logo">
+			</a>
+			<a href="https://www.linkedin.com/in/mateusz-toczyski-629aa4242/" target="_blank">
+				<img class="icon" src="{% static 'assets/InBug-White.png' %}" alt="LinikedIn Logo">
+			</a>
+		</div>
 	</div>
-	{% block content %}
-	{% endblock %}
+	<div id="page-content">
+		{% block content %}
+		{% endblock %}
+	</div>
 </body>
 
 </html>

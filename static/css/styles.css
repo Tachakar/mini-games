@@ -33,3 +33,19 @@ body {
 	width: 34px;
 	height: 34px;
 }
+
+#account-management {
+	font-size: 16px;
+	color: white;
+	padding-left: 10px;
+}
+
+#sign-up {
+	color: inherit;
+	text-decoration: none !important;
+}
+
+#login {
+	color: inherit;
+	text-decoration: none !important;
+}
