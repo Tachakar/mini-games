@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.apps import apps
-from django.contrib.auth.models import User
 from django.views.generic import TemplateView
+from django.urls import reverse_lazy
+from django.contrib.auth.forms import BaseUserCreationForm
 
 def homepage(req):
     games = []
@@ -16,12 +17,15 @@ def homepage(req):
 
 class SignUp(TemplateView):
     template_name = 'home/sign_up.html'
+    success_url = reverse_lazy('homepage')
     def get(self, request):
-        ctx = {}
+        form = BaseUserCreationForm
+        ctx = {'form':form}
         return self.render_to_response(ctx)
 
     def post(self, request):
         pass
+
 
 class Login(TemplateView):
     template_name = 'home/login.html'

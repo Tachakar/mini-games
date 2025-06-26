@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
 {% block extra_statics %}
+{% load crispy_forms_tags %}
 {% endblock %}
 {% block content %}
-<h1>Hello</h1>
+<form method="post" action="">
+	{% csrf_token %}
+	{{ form|crispy}}
+	<input type="submit" value="Submit">
+</form>
 {% endblock %}
