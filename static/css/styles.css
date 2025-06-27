@@ -7,6 +7,13 @@ body {
 	margin: 0;
 }
 
+#page-content {
+	display: flex-box;
+	justify-content: center;
+	align-content: center;
+	width: 20%;
+}
+
 #navbar {
 	background-color: #25292E;
 	height: 38px;
