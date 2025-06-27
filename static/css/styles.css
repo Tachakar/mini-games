@@ -3,15 +3,14 @@ html {
 }
 
 body {
-	background-color: lightgrey;
+	background-color: lightgrey !important;
 	margin: 0;
 }
 
 #page-content {
-	display: flex-box;
+	display: flexbox;
 	justify-content: center;
 	align-content: center;
-	width: 20%;
 }
 
 #navbar {
