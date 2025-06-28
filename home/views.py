@@ -4,8 +4,9 @@ from django.views.generic import TemplateView
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import BaseUserCreationForm
 
-def homepage(req):
+def homepage(request):
     games = []
+    template_name = "home/home_page.html"
     for game in apps.get_app_configs():
         curr_game = game.name
         if curr_game.startswith('django.') or curr_game.startswith('crispy_') or curr_game == "home":
@@ -15,7 +16,11 @@ def homepage(req):
 
     ctx = {"games":games}
 
-    return render(req, "home/home_page.html", ctx)
+    return render(request, template_name, ctx)
+
+def fail(request,ctx):
+    template_name = 'home/fail.html'
+    return render(request, template_name, ctx)
 
 class SignUp(TemplateView):
     template_name = 'home/sign_up.html'
@@ -29,10 +34,9 @@ class SignUp(TemplateView):
         username = request.POST.get('username', False)
         password1 = request.POST.get('password1', False)
         password2 = request.POST.get('password2', False)
-        if username == False or password1 == False or password2 == False:
-            #TODO PAGE REFRESH AND TRY AGAIN :)
-            pass
-        print(username,password1,password2)
+        ctx = {'username': username, 'password1': password1, 'password2': password2}
+        if username == False or password1 == False or password2 == False or (password1 != password2):
+            fail(request=request, ctx=ctx)
         return redirect(self.success_url)
 
 
