@@ -10,22 +10,29 @@ const apps = fs.readdirSync(tsSrcDir).filter(app => {
 	return fs.statSync(appPath).isDirectory()
 })
 console.log(`Found apps ${apps.join(', ')}`)
-
-apps.forEach(app => {
-	const outDir = path.join(projectRoot, app, 'static', app, 'js')
-	if (!fs.existsSync(outDir)) {
-		fs.mkdirSync(outDir, { recursive: true })
+async function buildApps() {
+	for (const app of apps) {
+		const outDir = path.join(projectRoot, app, 'static', app, 'js')
+		try {
+			if (!fs.existsSync(outDir)) {
+				fs.mkdirSync(outDir, { recursive: true })
+			}
+			console.log(`Building ${app}`)
+			await esbuild.build({
+				entryPoints: [`${tsSrcDir}/${app}/*.ts`],
+				outdir: outDir,
+				bundle: false,
+				platform: 'browser',
+				format: 'esm',
+				target: 'es6',
+				loader: { '.ts': 'ts' },
+			})
+			console.log(`Built ${app} into ${outDir}`)
+		} catch (err) {
+			console.log(`Failed to build ${app} into ${outDir}`)
+			console.log(err)
+			process.exit(1)
+		}
 	}
-
-	esbuild.build({
-		entryPoints: [`${tsSrcDir}/${app}/**/*.ts`],
-		outdir: outDir,
-		bundle: false,
-		platform: 'browser',
-		format: 'esm',
-		target: 'es6',
-		loader: { '.ts': 'ts' },
-	}).then(() => {
-		console.log(`Built ${app} to ${outDir}`)
-	}).catch(() => process.exit(1))
-})
+}
+buildApps()

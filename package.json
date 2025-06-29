@@ -2,13 +2,14 @@
 	"name": "minigames",
 	"version": "1.0.0",
 	"description": "Project built with Django and TypeScript. I'll capture my learning journey using this repo.  It includes some basics from Django like: templates, views, user authentication, working with database etc.",
+	"type": "module",
 	"scripts": {
 		"build": "node scripts/build-ts.mjs"
 	},
 	"author": "Mateusz Toczyski",
 	"license": "MIT",
 	"devDependencies": {
-		"esbuild": "0.25.5"
+		"esbuild": "^0.25.5"
 	},
 	"dependencies": {
 		"bootstrap": "^5.3.7"
