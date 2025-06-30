@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block extra_statics %}
+<link rel="stylesheet" href="{% static 'home/fail.css' %}">
+{% endblock %}
 {% block content %}
 <div id='msg'>
-	{% if password1 != password2 %}
-	Passwords did not match.
-	{% else %}
-	Something went wrong, please try again.
-	{% endif %}
+	<p>Something went wrong.</p>
+	<p>Error:</p>
+	<p>{{errors}}</p>
 	<form action="" method="get">
-		<button type="submit" value="Continue" onclick="window.location.href = '{% url " home/sign_up.html"
-			%}';">
+		<button type="submit" class="btn btn-primary" value="Continue" onclick="window.location.href = '{% url "
+			home/sign_up.html" %}';">
 	</form>
 </div>
 {% endblock %}

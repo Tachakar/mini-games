@@ -2,7 +2,8 @@ from django.shortcuts import redirect, render
 from django.apps import apps
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy
-from django.contrib.auth.forms import BaseUserCreationForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 def homepage(request):
     games = []
@@ -15,28 +16,26 @@ def homepage(request):
             games.append(curr_game)
 
     ctx = {"games":games}
+    print(User.objects.all())
 
     return render(request, template_name, ctx)
 
-def fail(request,ctx):
-    template_name = 'home/fail.html'
-    return render(request, template_name, ctx)
 
 class SignUp(TemplateView):
     template_name = 'home/sign_up.html'
     success_url = reverse_lazy('home:homepage')
-    def get(self, request):
-        form = BaseUserCreationForm
+    def get(self, request, *args, **kwargs):
+        form = UserCreationForm()
         ctx = {'form':form}
         return self.render_to_response(ctx)
 
-    def post(self, request):
-        username = request.POST.get('username', False)
-        password1 = request.POST.get('password1', False)
-        password2 = request.POST.get('password2', False)
-        ctx = {'username': username, 'password1': password1, 'password2': password2}
-        if username == False or password1 == False or password2 == False or (password1 != password2):
-            fail(request=request, ctx=ctx)
+    def post(self, request, *args, **kwargs):
+        user_form = UserCreationForm(request.POST)
+        ctx = {}
+        if not user_form.is_valid():
+            ctx['errors'] = user_form.errors
+            return render(request, 'home/fail.html', ctx)
+        user_form.save()
         return redirect(self.success_url)
 
 
