@@ -90,7 +90,12 @@ document.addEventListener("keydown", async (event) => {
 		try {
 			const response = await fetch(myURL, {
 				method: "POST",
-				headers: csrftoken ? { 'X-CSRFToken': csrftoken } : {},
+				headers: csrftoken ? {
+					'X-CSRFToken': csrftoken,
+					'Content-Type': 'application/json',
+				} : {
+					'Content-Type': 'application/json',
+				},
 				body: JSON.stringify({ guess })
 			})
 			const data = await response.json();
@@ -109,7 +114,7 @@ document.addEventListener("keydown", async (event) => {
 			row = getCurrentRow();
 			rowIndex = getEmptyRowIndex();
 		} catch (err) {
-			alert(`Error ${err}`)
+			alert(`Error ${err.message}`)
 			window.location.reload();
 		};
 	};

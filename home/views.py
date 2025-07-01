@@ -16,7 +16,6 @@ def homepage(request):
             games.append(curr_game)
 
     ctx = {"games":games}
-    print(User.objects.all())
 
     return render(request, template_name, ctx)
 

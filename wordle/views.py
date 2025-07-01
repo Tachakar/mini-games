@@ -1,20 +1,27 @@
 from django.http import JsonResponse
-import json
-from django.views.generic import TemplateView
+from django.shortcuts import render
+from django.views.generic import TemplateView, View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Word, Game
 from random import choice
+import json
 
 NUMBER_OF_WORDS = 2315
 
-class WordleView(TemplateView):
+class StartScreen(View, LoginRequiredMixin):
+    template_name = 'wordle/index.html'
+    def get(self, request):
+        ctx = {'loged_in': request.user.is_authenticated}
+        return render(request, self.template_name, ctx)
 
-    template_name = 'wordle/main.html'
+class WordleView(LoginRequiredMixin, TemplateView):
+
+    template_name = 'wordle/game.html'
     MAX_GUESSES = 6
     MAX_WORD_LENGTH = 5
 
-    def update_db(self, reqeust, guesses: list[str], game_over: bool, won: bool, winning_word: str):
+    def update_db(self, guesses: list[str], game_over: bool, won: bool, winning_word: str):
         game, created = Game.objects.get_or_create(
-            session_key = self.request.session.session_key, 
             defaults={'session_key': self.request.session.session_key, 'winning_word': winning_word, 'guesses': guesses, 'game_over':game_over, 'won': won}
         )
         if not created:
@@ -23,26 +30,34 @@ class WordleView(TemplateView):
             game.game_over = game_over
         game.save()
 
-    def init_session(self, request):
+    def start_game(self,winning_word):
+        new_game = Game.objects.create(
+            winning_word = winning_word, 
+        )
+        new_game.save()
+
+    def init_session(self, request, winning_word):
         if "winning_word" not in request.session:
-            request.session["winning_word"] = self.get_random_word()
+            request.session["winning_word"] = winning_word
+        else:
+            del request.session['winning_word']
         if "guesses" not in request.session:
             request.session["guesses"] = ["     " for _ in range(self.MAX_GUESSES)]
+        else:
+            del request.session['guesses']
         if "game_over" not in request.session:
             request.session["game_over"] = False
+        else:
+            del request.session['game_over']
 
     def get_random_word(self):
         words = Word.objects.values_list("text", flat = True)
         return str(choice(words))
 
-    def get(self, request, *args, **kwargs):
-        if 'guesses' in request.session:
-            del request.session['guesses']
-        if 'winning_word' in request.session:
-            del request.session['winning_word']
-        if 'game_over' in request.session:
-            del request.session['game_over']
-        self.init_session(request)
+    def get(self, request):
+        winning_word = self.get_random_word()
+        self.init_session(request, winning_word)
+        self.start_game(winning_word)
         ctx = self.get_context_data()
         return self.render_to_response(ctx)
 
@@ -52,7 +67,7 @@ class WordleView(TemplateView):
         data['guesses'] = self.request.session.get("guesses", ["     " for _ in range(self.MAX_GUESSES)])
         return data
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         try:
             data = json.loads(request.body)
             guess = data.get('guess').lower().strip()
@@ -78,13 +93,13 @@ class WordleView(TemplateView):
             won = guess == winning_word
             game_over = won or (row_index == self.MAX_WORD_LENGTH)
             request.session['game_over'] = game_over
-            #self.update_db(request, guesses, game_over, won, winning_word)
+            self.update_db(guesses, game_over, won, winning_word)
             return JsonResponse({
                 'status':'ok',
                 'game_over': game_over,
                 'guesses':guesses,
                 'won':won,
-                'winning_word': winning_word if game_over else '',
+                'winning_word': winning_word,
             },status=200)
 
         except:

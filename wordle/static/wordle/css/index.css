@@ -1,0 +1,33 @@
+#wordle-content {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: center;
+}
+
+#choice-container {
+	display: inline-flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	height: 100px;
+	padding-top: 18px;
+}
+
+.btn-primary {
+	background-color: #25292E;
+	border-color: lightgray;
+	font-size: 14px;
+}
+
+.btn-primary:hover {
+	background-color: #373d45;
+	border-color: black;
+}
+
+#desc {
+	text-align: center;
+	font-size: 17px;
+	width: 250px;
+}

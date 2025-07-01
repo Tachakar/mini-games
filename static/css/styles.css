@@ -7,12 +7,6 @@ body {
 	margin: 0;
 }
 
-#page-content {
-	display: flexbox;
-	justify-content: center;
-	align-content: center;
-}
-
 #navbar {
 	background-color: #25292E;
 	height: 38px;
@@ -39,6 +33,7 @@ body {
 	width: 34px;
 	height: 34px;
 }
+
 
 #account-management {
 	font-size: 16px;

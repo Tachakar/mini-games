@@ -10,8 +10,6 @@ class Word(models.Model):
 
 class Game(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    session_key = models.CharField(max_length = 40, blank=True)
-    status = models.CharField(max_length = 20)
     winning_word = models.CharField(max_length = 5)
     guesses = models.JSONField(default=list)
     created_at = models.DateTimeField(auto_now_add=True)

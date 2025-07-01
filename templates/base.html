@@ -29,10 +29,8 @@
 			</a>
 		</div>
 	</div>
-	<div id="page-content">
-		{% block content %}
-		{% endblock %}
-	</div>
+	{% block content %}
+	{% endblock %}
 	<script src="{% static 'js_bootstrap/bootstrap.js' %}" type="module"></script>
 </body>
 

@@ -1,0 +1,35 @@
+{% extends 'start.html' %}
+{% load static %}
+
+{% block content %}
+<div id="page-content">
+	<div id="title">Wordle</div>
+	<div id="grid">
+		{% for guess in guesses %}
+		<div class="row" id="row{{forloop.counter0}}">
+			{% for letter in guess %}
+			<div class="letter-container">
+				<div class="letter">
+					{{ letter }}
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		{% if guess|lower == winning_word %}
+		<div id='game-result' data-won='true'></div>
+		{% endif %}
+		{% endfor %}
+	</div>
+	<div id="popup-overlay">
+		<div id="popup-content"></div>
+		<form method="post">
+			<button type="button" onclick="window.location.reload()">Restart</button>
+		</form>
+	</div>
+	<form method="post" id="user-post">
+		{% csrf_token %}
+	</form>
+</div>
+<script type="module" src="{% static 'wordle/js/main.js' %}"></script>
+<script type="module" src="{% static 'wordle/js/pop_up.js' %}"></script>
+{% endblock %}

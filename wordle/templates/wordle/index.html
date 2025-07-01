@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_statics %}
+<link rel="stylesheet" href="{% static 'wordle/css/game.css' %}">
+<link rel="icon" href="{% static 'wordle/assets/favicon.ico'%}">
+<link rel="stylesheet" href="{% static 'wordle/css/index.css' %}">
+{% endblock %}
+{% block content %}
+<div id="wordle-content">
+	<div id="title">Wordle</div>
+	<div id="desc">Welcome to the Wordle. You can either choose to play game or browse your game history. You have
+		to guess random word in 6 tries or you lose. Good luck and have fun!</div>
+	<div id="choice-container">
+		<div id="new-game">
+			<button type="submit" value="New game" class="btn btn-primary"
+				onclick="{% url 'wordle:game' game.id%}">Play</button>
+		</div>
+		<div id="history">
+			<button type="submit" value="History" class="btn btn-primary">History</button>
+		</div>
+	</div>
+</div>
+{% endblock %}
