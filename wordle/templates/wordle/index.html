@@ -13,8 +13,10 @@
 		to guess random word in 6 tries or you lose. Good luck and have fun!</div>
 	<div id="choice-container">
 		<div id="new-game">
-			<button type="submit" value="New game" class="btn btn-primary"
-				onclick="{% url 'wordle:game' game.id%}">Play</button>
+			<form action="{% url 'wordle:new_game' %}" method="POST">
+				{% csrf_token %}
+				<button type="submit" value="New game" class="btn btn-primary">Play</button>
+			</form>
 		</div>
 		<div id="history">
 			<button type="submit" value="History" class="btn btn-primary">History</button>

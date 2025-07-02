@@ -1,4 +1,12 @@
-const myURL = 'http://127.0.0.1:8000/wordle/'
+const gameData = document.getElementById('game-data')?.dataset;
+let gameId: string
+if (gameData !== undefined && gameData.gameId !== undefined) {
+
+	gameId = gameData.gameId
+} else {
+	gameId = "error"
+}
+const API_URL = `wordle/game/${gameId}/check/`
 const WORD_LENGTH = 5;
 const ANIMATION_DELAY_MS = 300;
 function getCookieValue(name: string) {
@@ -13,6 +21,7 @@ function getCookieValue(name: string) {
 			};
 		};
 	};
+	return null
 };
 function getEmptyRowIndex() {
 	const Rows = document.querySelectorAll('.row');
@@ -88,17 +97,22 @@ document.addEventListener("keydown", async (event) => {
 	};
 	if (key === 'Enter' && containerIndex == WORD_LENGTH) {
 		try {
-			const response = await fetch(myURL, {
+			const response = await fetch('check/', {
 				method: "POST",
-				headers: csrftoken ? {
-					'X-CSRFToken': csrftoken,
-					'Content-Type': 'application/json',
-				} : {
-					'Content-Type': 'application/json',
+				headers: {
+					"Content-Type": "application/json",
+					"X-CSRFToken": csrftoken || "",
 				},
-				body: JSON.stringify({ guess })
+				body: JSON.stringify({ guess }),
 			})
+
+			if (!response.ok) {
+				throw new Error(`HTTP error, status: ${response.status}`)
+			}
 			const data = await response.json();
+			if (!data.guesses || !data.guesses[rowIndex]) {
+				throw new Error('Invalid response format')
+			}
 			const guesses = data.guesses[rowIndex];
 			await processRowAnimations(guesses, row)
 
@@ -114,7 +128,7 @@ document.addEventListener("keydown", async (event) => {
 			row = getCurrentRow();
 			rowIndex = getEmptyRowIndex();
 		} catch (err) {
-			alert(`Error ${err.message}`)
+			alert(`Error: ${err}`)
 			window.location.reload();
 		};
 	};

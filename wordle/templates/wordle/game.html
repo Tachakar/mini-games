@@ -1,9 +1,10 @@
-{% extends 'start.html' %}
+{% extends 'wordle/index.html' %}
 {% load static %}
 
 {% block content %}
-<div id="page-content">
+<div id="game-content">
 	<div id="title">Wordle</div>
+	<h1 style="text-align: center;">{{winning_word}}</h1>
 	<div id="grid">
 		{% for guess in guesses %}
 		<div class="row" id="row{{forloop.counter0}}">
@@ -26,10 +27,12 @@
 			<button type="button" onclick="window.location.reload()">Restart</button>
 		</form>
 	</div>
-	<form method="post" id="user-post">
+	<form action="{% url 'wordle:check' pk=game_id%}" method="POST" id="user-post">
 		{% csrf_token %}
 	</form>
 </div>
-<script type="module" src="{% static 'wordle/js/main.js' %}"></script>
+<div id="game-data" data-game-id={{game_id}}></div>
+<script type="module" src="{% static 'wordle/js/main.js' %}">
+</script>
 <script type="module" src="{% static 'wordle/js/pop_up.js' %}"></script>
 {% endblock %}
