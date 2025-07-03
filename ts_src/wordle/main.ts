@@ -110,7 +110,7 @@ document.addEventListener("keydown", async (event) => {
 				throw new Error(`HTTP error, status: ${response.status}`)
 			}
 			const data = await response.json();
-			if (!data.guesses || !data.guesses[rowIndex]) {
+			if (!data || !data.guesses[rowIndex]) {
 				throw new Error('Invalid response format')
 			}
 			const guesses = data.guesses[rowIndex];

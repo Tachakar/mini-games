@@ -4,7 +4,6 @@
 {% block content %}
 <div id="game-content">
 	<div id="title">Wordle</div>
-	<h1 style="text-align: center;">{{winning_word}}</h1>
 	<div id="grid">
 		{% for guess in guesses %}
 		<div class="row" id="row{{forloop.counter0}}">
@@ -23,8 +22,8 @@
 	</div>
 	<div id="popup-overlay">
 		<div id="popup-content"></div>
-		<form method="post">
-			<button type="button" onclick="window.location.reload()">Restart</button>
+		<form method="POST" action="{% url 'wordle:new_game' %}">
+			<button type="submit" >Play again</button>
 		</form>
 	</div>
 	<form action="{% url 'wordle:check' pk=game_id%}" method="POST" id="user-post">

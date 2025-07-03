@@ -12,15 +12,7 @@ NUMBER_OF_WORDS = 2315
 def get_random_word():
     words = Word.objects.values_list("text", flat = True)
     return str(choice(words))
-def update_db(guesses: list[str], game_over: bool, won: bool, winning_word: str):
-        game, created = Game.objects.get_or_create(
-            defaults={'winning_word': winning_word, 'guesses': guesses, 'game_over':game_over, 'won': won}
-        )
-        if not created:
-            game.guesses = guesses
-            game.won = won
-            game.game_over = game_over
-        game.save()
+
 
 class NewGame(LoginRequiredMixin, View):
     def post(self,request):
@@ -39,10 +31,9 @@ class CheckGameState(View, LoginRequiredMixin):
         try:
             data = json.loads(request.body)
             guess = data.get('guess').lower().strip()
-            game = get_object_or_404(Game, pk=pk, user = request.user)
+            game = Game.objects.get(pk=pk)
             print(game)
             winning_word = game.winning_word
-            guesses = game.guesses
             guessStatus = {}
             for i,letter in enumerate(guess):
                 if letter == winning_word[i]:
@@ -54,15 +45,18 @@ class CheckGameState(View, LoginRequiredMixin):
                 guessStatus[i] = n
 
             try:
+                guesses = game.guesses
                 row_index = guesses.index('     ')
             except:
                 return JsonResponse({'status':'error', 'message': "Couldn't got row index"},status=400)
 
             guesses[row_index] = guessStatus
             won = guess == winning_word
-            game_over = False
             game_over = won or (row_index == MAX_WORD_LENGTH)
-            update_db(guesses, game_over, won, winning_word)
+            try:
+                Game.objects.filter(pk=pk).update(guesses=guesses, game_over=game_over, won=won)
+            except: 
+                return JsonResponse({'status':'error', 'message': "Couldn't update database."},status = 500)
             return JsonResponse({
                 'status':'ok',
                 'game_over': game_over,
