@@ -12,6 +12,7 @@ class Game(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     winning_word = models.CharField(max_length = 5)
     guesses = models.JSONField(default=list)
+    statuses = models.JSONField(default=list)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     game_over = models.BooleanField(default=False)

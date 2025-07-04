@@ -49,18 +49,22 @@ function applyLetterStatus(letter: Element, letterData: { letter: string, status
 	if (!letter) return;
 	letter.classList.add('flip');
 	letter.children[0].classList.add('after');
-	if (letterStatus === 'correct') letter.classList.add('correct');
-	else if (letterStatus === 'inside') letter.classList.add('inside');
-	else if (letterStatus === 'wrong') letter.classList.add('wrong');
+	if (letterStatus === 'c') letter.classList.add('correct');
+	else if (letterStatus === 'i') letter.classList.add('inside');
+	else if (letterStatus === 'w') letter.classList.add('wrong');
 }
-async function processRowAnimations(guessesData: { letter: string, status: string }[], row: HTMLElement) {
+async function processRowAnimations(guess: string, status: string, row: HTMLElement) {
 	const promises: Promise<void>[] = [];
 	for (let i = 0; i < WORD_LENGTH; i++) {
 		const letter = row.children[i];
+		const guessData = {
+			'letter': guess[i],
+			'status': status[i],
+		}
 		promises.push(
 			new Promise((resolve) => {
 				setTimeout(() => {
-					applyLetterStatus(letter, guessesData[i]);
+					applyLetterStatus(letter, guessData);
 					resolve();
 				}, i * ANIMATION_DELAY_MS)
 			})
@@ -110,8 +114,8 @@ document.addEventListener("keydown", async (event) => {
 			if (!data || !data.guesses[rowIndex]) {
 				throw new Error('Invalid response format')
 			}
-			const guesses = data.guesses[rowIndex];
-			await processRowAnimations(guesses, row)
+			const status = data.status;
+			await processRowAnimations(guess, status, row)
 
 			if (data.game_over) {
 				const popupOverlay = document.getElementById('popup-overlay');
