@@ -14,6 +14,15 @@ def get_random_word():
     return str(choice(words))
 
 
+class GameHistoryView(View, LoginRequiredMixin):
+    template_name = 'wordle/history.html'
+    def get(self, request):
+        games = Game.objects.filter(pk=request.user.pk)
+        ctx = {}
+        ctx['games'] = games
+        return render(request, self.template_name, ctx)
+
+
 class NewGame(LoginRequiredMixin, View):
     def post(self,request):
 

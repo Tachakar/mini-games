@@ -19,7 +19,9 @@
 			</form>
 		</div>
 		<div id="history">
-			<button type="submit" value="History" class="btn btn-primary">History</button>
+			<a href="{% url 'wordle:history' %}">
+				<button type="button" value="History" class="btn btn-primary">History</button>
+			</a>
 		</div>
 	</div>
 </div>

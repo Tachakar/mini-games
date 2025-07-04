@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% extends 'wordle/index.html' %}
+{% load static %}
+{% block extra_statics %}
+<link rel="stylesheet" href="{% static 'wordle/css/history.css' %}">
+{% endblock %}
+{% block content %}
+<div id="history-content">
+	{% if games %}
+	{% for game in games %}
+	<div class="game">{{game}]</div>
+	{% endfor %}
+	{% else %}
+	<div id='msg'>You have not played any games yet.</div>
+		<form action="{% url 'wordle:new_game' %}" method="post">
+			{% csrf_token %}
+			<button type="Submit" id="new-game-button" class="btn btn-primary" value="New game">Play new game</button>
+		</form>
+	{% endif %}
+</div>
+{% endblock %}
