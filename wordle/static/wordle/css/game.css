@@ -1,5 +1,6 @@
 button {
-	width: 75px;
+	font-size: 14px;
+	width: 90px;
 	height: 50px;
 	background-color: grey;
 	border: 1px, solid, black;
@@ -92,21 +93,29 @@ button:hover {
 	height: 40%;
 	width: 20%;
 	background-color: #454545;
-	opacity: 0;
-	visibility: hidden;
 	transform: translate(-50%, -50%);
 	transition: opacity 0.3s ease, visability 0.3s ease;
 }
 
+#options {
+	display: inline-flex;
+	justify-content: center;
+	gap: 10px;
+}
+
 #popup-content {
-	text-align: center;
 	padding: 30px;
 	color: white;
 	box-shadow: 1px, 1px, 2px, grey;
 	font-size: 24px;
 }
 
-#popup-overlay.show {
+.show {
 	opacity: 1;
 	visibility: visible;
+}
+
+.hidden {
+	opacity: 0;
+	visibility: hidden;
 }

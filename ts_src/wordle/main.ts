@@ -23,6 +23,12 @@ function getCookieValue(name: string) {
 	};
 	return null
 };
+function showPopup(winning_word: string, popupOverlay: HTMLElement, popupContent: HTMLElement, won: boolean) {
+	const msg = won ? "Good job, you've won." : `You've lost. The word was ${winning_word}.`;
+	popupContent.innerText = msg;
+	popupOverlay.classList.remove('hidden');
+	popupOverlay.classList.add('show');
+}
 function getEmptyRowIndex() {
 	const Rows = document.querySelectorAll('.row');
 	const arrayRows = Array.from(Rows);
@@ -30,15 +36,6 @@ function getEmptyRowIndex() {
 		if (arrayRows[i].textContent?.trim() == "") return i;
 	};
 	return -1
-
-};
-function showPopup(winningWord: string, won: boolean, popupOverlay: HTMLElement, popupContent: HTMLElement) {
-	if (won) {
-		popupContent.textContent = "Good job, you've won!"
-	} else {
-		popupContent.textContent = `You've lost, try again. The word was: ${winningWord}`;
-	}
-	popupOverlay.classList.add('show');
 
 };
 function getCurrentRow() {
@@ -120,7 +117,7 @@ document.addEventListener("keydown", async (event) => {
 				const popupOverlay = document.getElementById('popup-overlay');
 				const popupConent = document.getElementById('popup-content');
 				if (!popupConent || !popupOverlay) return;
-				showPopup(data.winning_word, data.won, popupOverlay, popupConent);
+				showPopup(data.winning_word, popupOverlay, popupConent, data.won);
 				return;
 			}
 			containerIndex = 0;

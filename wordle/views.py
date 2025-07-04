@@ -96,4 +96,8 @@ class WordleView(TemplateView, LoginRequiredMixin):
     
     def get(self, request, pk=None):
         ctx = self.get_context_data()
+        game = get_object_or_404(Game, pk=pk)
+        guesses = game.guesses
+        print(guesses)
         return self.render_to_response(ctx)
+

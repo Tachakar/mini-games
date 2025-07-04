@@ -20,11 +20,17 @@
 		{% endif %}
 		{% endfor %}
 	</div>
-	<div id="popup-overlay">
-		<div id="popup-content"></div>
-		<form method="POST" action="{% url 'wordle:new_game' %}">
-			<button type="submit" >Play again</button>
-		</form>
+	<div id="popup-overlay" class="hidden">
+		<div id="popup-content"> </div>
+		<div id="options">
+			<form method="POST" action="{% url 'wordle:new_game' %}">
+				{% csrf_token %}
+				<button type="submit">Play again</button>
+			</form>
+			<a href="{% url 'home:homepage' %}">
+				<button type="button">Home</button>
+			</a>
+		</div>
 	</div>
 	<form action="{% url 'wordle:check' pk=game_id%}" method="POST" id="user-post">
 		{% csrf_token %}
