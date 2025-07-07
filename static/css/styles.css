@@ -8,19 +8,16 @@ body {
 }
 
 #navbar {
+	display: flex;
 	background-color: #25292E;
 	height: 38px;
-	margin: 0;
-	padding: 0;
-	display: flex;
 	align-items: center;
+	justify-content: space-between;
 }
 
 .navbar-socials {
-	display: inline-flex;
+	margin-right: 10px;
 	margin-left: auto;
-	gap: 8px;
-	padding-right: 10px;
 }
 
 .icon {
@@ -34,8 +31,17 @@ body {
 	height: 34px;
 }
 
+#username {
+	color: white;
+	font-size: 16px;
+	position: absolute;
+	left: 50%;
+	text-align: center;
+	transform: translateX(-50%);
+}
 
 #account-management {
+	margin-right: auto;
 	font-size: 16px;
 	color: white;
 	padding-left: 10px;

@@ -9,6 +9,11 @@ import json
 MAX_GUESSES = 6
 MAX_WORD_LENGTH = 5
 NUMBER_OF_WORDS = 2315
+class Letter():
+    def __init__(self, letter, status):
+        self.letter = letter
+        self.status = status
+
 def get_random_word():
     words = Word.objects.values_list("text", flat = True)
     return str(choice(words))
@@ -17,7 +22,7 @@ def get_random_word():
 class GameHistoryView(View, LoginRequiredMixin):
     template_name = 'wordle/history.html'
     def get(self, request):
-        games = Game.objects.filter(pk=request.user.pk)
+        games = Game.objects.filter(user=request.user).order_by('-created_at')
         ctx = {}
         ctx['games'] = games
         return render(request, self.template_name, ctx)
@@ -96,18 +101,27 @@ class StartScreen(View, LoginRequiredMixin):
 class WordleView(View, LoginRequiredMixin):
 
     template_name = 'wordle/game.html'
-
-    #def get_context_data(self, **kwargs):
-    #    data = super().get_context_data(**kwargs)
-    #    game_id = self.kwargs.get('pk')
-    #    data['guesses'] = ['     ' for _ in range(MAX_GUESSES)]
-    #    data['game_id'] = game_id
-    #    return data
-    
     def get(self, request, pk=None):
         ctx = {}
         game = get_object_or_404(Game, pk=pk)
         ctx['game_id'] = game.pk
-        ctx['guesses'] = game.guesses
+        guesses = game.guesses
+        winning_word = game.winning_word
+        statuses = []
+        for guess in guesses:
+            x = []
+            for i in range(MAX_WORD_LENGTH):
+                if guess[i] == winning_word[i]:
+                    x.append(Letter(guess[i], 'c'))
+                elif guess[i] == ' ':
+                    x.append(Letter(guess[i], 'e'))
+                elif guess[i] not in winning_word:
+                    x.append(Letter(guess[i], 'w'))
+                else:
+                    x.append(Letter(guess[i], 'i'))
+            statuses.append(x)
+        ctx['guesses'] = statuses
+        print(statuses)
+
         return render(request, self.template_name, ctx)
 

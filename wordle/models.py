@@ -19,7 +19,11 @@ class Game(models.Model):
     won = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Game {self.id} - {self.winning_word} ({'Finished' if self.game_over else 'Active'})"
+        if self.game_over:
+            return f"Finished | {self.created_at.strftime("%A, %d. %B %Y %I:%M%p")}"
+        else:
+            return f"Active | {self.created_at.strftime("%A, %d. %B %Y %I:%M%p")}"
+
     class Meta:
         ordering = ['-created_at']
     @property

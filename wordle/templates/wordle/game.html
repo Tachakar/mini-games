@@ -7,37 +7,48 @@
 	<div id="grid">
 		{% for guess in guesses %}
 		<div class="row" id="row{{forloop.counter0}}">
-			{% for letter in guess %}
-			<div class="letter-container">
-				<div class="letter">
-					{{ letter }}
-				</div>
+			{% for letterData in guess %}
+			{% if letterData.status == 'c' %}
+			<div class="letter-container correct">
+				<div class="letter">{{ letterData.letter}}</div>
 			</div>
+			{% elif letterData.status == 'e' %}
+			<div class="letter-container">
+				<div class="letter">{{ letterData.letter}}</div>
+			</div>
+			{% elif letterData.status == 'i' %}
+			<div class="letter-container inside">
+				<div class="letter">{{ letterData.letter}}</div>
+			</div>
+			{% else %}
+			<div class="letter-container wrong">
+				<div class="letter">{{ letterData.letter}}</div>
+			</div>
+			{% endif %}
 			{% endfor %}
 		</div>
 		{% if guess|lower == winning_word %}
 		<div id='game-result' data-won='true'></div>
 		{% endif %}
 		{% endfor %}
-	</div>
-	<div id="popup-overlay" class="hidden">
-		<div id="popup-content"> </div>
-		<div id="options">
-			<form method="POST" action="{% url 'wordle:new_game' %}">
-				{% csrf_token %}
-				<button type="submit">Play again</button>
-			</form>
-			<a href="{% url 'home:homepage' %}">
-				<button type="button">Home</button>
-			</a>
+		<div id="popup-overlay" class="hidden">
+			<div id="popup-content"> </div>
+			<div id="options">
+				<form method="POST" action="{% url 'wordle:new_game' %}">
+					{% csrf_token %}
+					<button type="submit">Play again</button>
+				</form>
+				<a href="{% url 'home:homepage' %}">
+					<button type="button">Home</button>
+				</a>
+			</div>
 		</div>
+		<form action="{% url 'wordle:check' pk=game_id%}" method="POST" id="user-post">
+			{% csrf_token %}
+		</form>
 	</div>
-	<form action="{% url 'wordle:check' pk=game_id%}" method="POST" id="user-post">
-		{% csrf_token %}
-	</form>
-</div>
-<div id="game-data" data-game-id={{game_id}}></div>
-<script type="module" src="{% static 'wordle/js/main.js' %}">
-</script>
-<script type="module" src="{% static 'wordle/js/pop_up.js' %}"></script>
-{% endblock %}
+	<div id="game-data" data-game-id={{game_id}}></div>
+	<script type="module" src="{% static 'wordle/js/main.js' %}">
+	</script>
+	<script type="module" src="{% static 'wordle/js/pop_up.js' %}"></script>
+	{% endblock %}

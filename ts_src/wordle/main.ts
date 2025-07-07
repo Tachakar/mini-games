@@ -23,7 +23,19 @@ function getCookieValue(name: string) {
 	};
 	return null
 };
-function showPopup(winning_word: string, popupOverlay: HTMLElement, popupContent: HTMLElement, won: boolean) {
+function checkGameStatus(won: boolean, game_over: boolean) {
+	const rows = document.querySelectorAll('.row')
+	for (const row of rows) {
+		console.log(row);
+	}
+
+}
+function showPopup(winning_word: string, won: boolean) {
+	const popupOverlay = document.getElementById('popup-overlay');
+	const popupContent = document.getElementById('popup-content');
+	if (!popupOverlay || !popupContent) {
+		return;
+	}
 	const msg = won ? "Good job, you've won." : `You've lost. The word was ${winning_word}.`;
 	popupContent.innerText = msg;
 	popupOverlay.classList.remove('hidden');
@@ -72,13 +84,26 @@ async function processRowAnimations(guess: string, status: string, row: HTMLElem
 	};
 	await Promise.all(promises)
 };
+async function fetchCheck(guess: string, csrftoken: string | null) {
+	const response = await fetch('check/', {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"X-CSRFToken": csrftoken || "",
+		},
+		body: JSON.stringify({ guess }),
+	})
+
+	if (!response.ok) {
+		throw new Error(`HTTP error, status: ${response.status}`)
+	}
+	return response
+}
 const csrftoken = getCookieValue('csrftoken');
 let containerIndex = 0;
 let guess = "";
 let row = getCurrentRow();
 let rowIndex = getEmptyRowIndex();
-
-
 document.addEventListener("keydown", async (event) => {
 	const key = event.key;
 	if (!row) return;
@@ -98,18 +123,7 @@ document.addEventListener("keydown", async (event) => {
 	};
 	if (key === 'Enter' && containerIndex == WORD_LENGTH) {
 		try {
-			const response = await fetch('check/', {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					"X-CSRFToken": csrftoken || "",
-				},
-				body: JSON.stringify({ guess }),
-			})
-
-			if (!response.ok) {
-				throw new Error(`HTTP error, status: ${response.status}`)
-			}
+			const response = await fetchCheck(guess, csrftoken)
 			const data = await response.json();
 			if (!data || !data.guesses[rowIndex]) {
 				throw new Error('Invalid response format')
@@ -118,10 +132,7 @@ document.addEventListener("keydown", async (event) => {
 			await processRowAnimations(guess, status, row)
 
 			if (data.game_over) {
-				const popupOverlay = document.getElementById('popup-overlay');
-				const popupConent = document.getElementById('popup-content');
-				if (!popupConent || !popupOverlay) return;
-				showPopup(data.winning_word, popupOverlay, popupConent, data.won);
+				showPopup(data.winning_word, data.won);
 				return;
 			}
 			containerIndex = 0;

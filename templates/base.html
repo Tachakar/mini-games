@@ -20,6 +20,11 @@
 			<a href="{% url 'home:sign_up' %}" id="sign-up">Sign up</a> | <a href="{% url 'home:login' %}"
 				id="login">Login</a>
 		</div>
+		{% if user.is_authenticated %}
+		<div id="username">
+			{{ request.user.username }}
+		</div>
+		{% endif %}
 		<div class="navbar-socials">
 			<a href="https://github.com/Tachakar/MiniGames" target="_blank">
 				<img class="icon" src="{% static 'assets/github-mark-white.png' %}" alt="GitHub Logo">

@@ -8,14 +8,17 @@
 <div id="history-content">
 	{% if games %}
 	{% for game in games %}
-	<div class="game">{{game}]</div>
+		<a href="{% url 'wordle:game' game.pk%}" class="game">
+			{{game}}
+		</a>
 	{% endfor %}
 	{% else %}
 	<div id='msg'>You have not played any games yet.</div>
-		<form action="{% url 'wordle:new_game' %}" method="post">
-			{% csrf_token %}
-			<button type="Submit" id="new-game-button" class="btn btn-primary" value="New game">Play new game</button>
-		</form>
+	<form action="{% url 'wordle:new_game' %}" method="post">
+		{% csrf_token %}
+		<button type="Submit" id="new-game-button" class="btn btn-primary" value="New game">Play new
+			game</button>
+	</form>
 	{% endif %}
 </div>
 {% endblock %}
