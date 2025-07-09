@@ -1,6 +1,10 @@
-#page-content {
+#sign-up-content {
 	display: flex;
 	justify-content: center;
 	align-content: center;
 	padding-top: 35px;
+}
+
+#sign-up-form {
+	width: 20%;
 }

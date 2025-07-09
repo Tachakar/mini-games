@@ -98,6 +98,7 @@ class StartScreen(View, LoginRequiredMixin):
         ctx = {}
         return render(request, self.template_name, ctx)
 
+
 class WordleView(View, LoginRequiredMixin):
 
     template_name = 'wordle/game.html'
@@ -121,7 +122,6 @@ class WordleView(View, LoginRequiredMixin):
                     x.append(Letter(guess[i], 'i'))
             statuses.append(x)
         ctx['guesses'] = statuses
-        print(statuses)
 
         return render(request, self.template_name, ctx)
 

@@ -6,10 +6,12 @@
 <link rel="stylesheet" href="{% static 'css/sign_up.css'%}">
 {% endblock %}
 {% block content %}
-<form method="post" action="">
+<div id="sign-up-content">
+<form method="post" action="" id="sign-up-form">
 	{% csrf_token %}
 	{{ form|crispy}}
 	<input type="submit" value="Create">
 	<input type="submit" onclick="window.location.href=' {% url 'home:homepage' %}'; return false;" value="Cancel">
 </form>
+</div>
 {% endblock %}
