@@ -1,6 +1,12 @@
-const homeContent = document.getElementById("home-content");
-if (homeContent) {
-	setTimeout(() => { homeContent.classList.add("show") }, 200)
-} else {
-	alert("Something went wrong while loading main page.");
-};
+document.addEventListener('DOMContentLoaded', () => {
+	try {
+		const x = document.getElementById('home-content')
+		if (!x) {
+			throw new Error('Something went wrong.')
+		}
+		setTimeout(() => { x.classList.add('show') }, 200)
+	}
+	catch (err) {
+		console.error(err)
+	}
+})
