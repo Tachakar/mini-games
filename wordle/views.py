@@ -41,6 +41,14 @@ class NewGame(LoginRequiredMixin, View):
         return redirect('wordle:game', pk=game.pk)
 
 class CheckGameState(View, LoginRequiredMixin):
+    def get(self, request, pk=None):
+        game = get_object_or_404(Game, pk=pk)
+        return JsonResponse({
+            'winning_word': game.winning_word,
+            'won': game.won,
+            'game_over':game.game_over
+        },status=200)
+
     def post(self, request, pk=None):
         try:
             data = json.loads(request.body)
