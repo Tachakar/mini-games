@@ -56,3 +56,8 @@ body {
 	color: inherit;
 	text-decoration: none !important;
 }
+
+#logout-icon {
+	width: 15px;
+	height: 15px;
+}

@@ -3,7 +3,7 @@ from django.apps import apps
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth import logout
 
 def homepage(request):
     games = []
@@ -19,6 +19,9 @@ def homepage(request):
 
     return render(request, template_name, ctx)
 
+def logout_view(request):
+    logout(request)
+    return redirect(reverse_lazy('home:homepage'))
 
 class SignUp(TemplateView):
     template_name = 'home/sign_up.html'

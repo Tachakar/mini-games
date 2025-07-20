@@ -94,6 +94,7 @@ button:hover {
 	background-color: #454545;
 	transform: translate(-50%, -50%);
 	transition: opacity 0.3s ease, visability 0.3s ease;
+	box-shadow: 1px 1px 4px grey;
 }
 
 #options {
@@ -105,8 +106,8 @@ button:hover {
 #popup-content {
 	padding: 30px;
 	color: white;
-	box-shadow: 1px, 1px, 2px, grey;
 	font-size: 24px;
+	text-align: center;
 }
 
 .show {

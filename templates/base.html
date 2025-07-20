@@ -5,7 +5,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Mini Games</title>
-	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+	<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
 	<link rel="icon" href="{% static 'assets/favicon.ico'%}">
 	<link rel="stylesheet" href="{% static 'css_bootstrap/bootstrap.css'%}">
 	{% block extra_statics %}{% endblock %}
@@ -23,6 +23,9 @@
 		{% if user.is_authenticated %}
 		<div id="username">
 			{{ request.user.username }}
+			<a href="{% url 'home:logout' %}">
+				<img src="{% static 'assets/logout.png'%}" id="logout-icon" alt="Logout">
+			</a>
 		</div>
 		{% endif %}
 		<div class="navbar-socials">
