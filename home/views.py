@@ -2,8 +2,8 @@ from django.shortcuts import redirect, render
 from django.apps import apps
 from django.views.generic import TemplateView
 from django.urls import reverse_lazy
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import authenticate, login, logout
 
 def homepage(request):
     games = []
@@ -44,9 +44,17 @@ class SignUp(TemplateView):
 class Login(TemplateView):
     template_name = 'home/login.html'
     def get(self, request):
-        ctx = {}
+        form = AuthenticationForm
+        ctx = {'form': form}
         return self.render_to_response(ctx)
 
     def post(self, request):
-        pass
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request,user)
+            return redirect("home")
+
+        return redirect(reverse_lazy("home:login"))
 

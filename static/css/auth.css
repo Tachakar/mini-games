@@ -1,10 +1,10 @@
-#sign-up-content {
+#auth-content {
 	display: flex;
 	justify-content: center;
 	align-content: center;
 	padding-top: 35px;
 }
 
-#sign-up-form {
+#auth-form {
 	width: 20%;
 }
