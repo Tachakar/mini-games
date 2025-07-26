@@ -22,9 +22,12 @@ def get_random_word():
 class GameHistoryView(View, LoginRequiredMixin):
     template_name = 'wordle/history.html'
     def get(self, request):
-        games = Game.objects.filter(user=request.user).order_by('-created_at')
         ctx = {}
-        ctx['games'] = games
+        try:
+            games = Game.objects.filter(user=request.user).order_by('-created_at')
+            ctx['games'] = games
+        except:
+            print("User in not logged in")
         return render(request, self.template_name, ctx)
 
 

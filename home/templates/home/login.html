@@ -11,9 +11,8 @@
 	<form action="" method="post" id="auth-form">
 		{% csrf_token %}
 		{{ form | crispy}}
-		<input type="button" value="Login">
-		<input type="button" onclick="window.location.href = '{% url 'home:homepage'%}' return false;"
-			value="Back">
+		<input type="submit" value="Login">
+		<a href="{% url 'home:homepage' %}">Cancel</a>
 	</form>
 </div>
 {% endblock %}
