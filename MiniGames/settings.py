@@ -85,7 +85,7 @@ DATABASES = {
         "NAME": "db_minigames",
         "USER": config('DB_USER'),
         "PASSWORD": config('DB_PASSWORD'),
-        "HOST":"localhost",
+        "HOST":"",
         "PORT":"5432",
     }
 }

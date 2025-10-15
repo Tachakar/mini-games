@@ -10,7 +10,7 @@
 <form method="post" action="" id="auth-form">
 	{% csrf_token %}
 	{{ form|crispy}}
-	<input type="submit" value="Create">
+<input type="submit" value="Create" onclick="window.location.href='{% url 'home:login' %}'">
 	<input type="submit" onclick="window.location.href=' {% url 'home:homepage' %}'; return false;" value="Cancel">
 </form>
 </div>
