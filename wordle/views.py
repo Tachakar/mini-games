@@ -19,7 +19,7 @@ def get_random_word():
     return str(choice(words))
 
 
-class GameHistoryView(View, LoginRequiredMixin):
+class WordleGameHistoryView(View, LoginRequiredMixin):
     template_name = 'wordle/history.html'
     def get(self, request):
         ctx = {}
@@ -31,7 +31,7 @@ class GameHistoryView(View, LoginRequiredMixin):
         return render(request, self.template_name, ctx)
 
 
-class NewGame(LoginRequiredMixin, View):
+class WordleNewGame(LoginRequiredMixin, View):
     def post(self,request):
 
         game = Game.objects.create(
@@ -43,7 +43,7 @@ class NewGame(LoginRequiredMixin, View):
         )
         return redirect('wordle:game', pk=game.pk)
 
-class CheckGameState(View, LoginRequiredMixin):
+class WordleCheckGameState(View, LoginRequiredMixin):
     def get(self, request, pk=None):
         game = get_object_or_404(Game, pk=pk)
         return JsonResponse({
@@ -103,7 +103,7 @@ class CheckGameState(View, LoginRequiredMixin):
                 status=500
             )
 
-class StartScreen(View, LoginRequiredMixin):
+class WordleStartScreen(View, LoginRequiredMixin):
     template_name = 'wordle/index.html'
     def get(self, request):
         ctx = {}
