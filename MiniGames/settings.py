@@ -35,7 +35,6 @@ SECURE_SSL_REDIRECT = False
 INSTALLED_APPS = [
     "wordle",
     "home",
-    "tictactoe",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
